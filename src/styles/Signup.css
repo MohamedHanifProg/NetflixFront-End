@@ -1,19 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-body {
-  margin: 0;
-  font-family: 'Roboto', sans-serif;
-}
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    background: url('../assets/Hero.png') center / cover no-repeat;
+    font-family: 'Roboto', sans-serif;
+  }
+  
 
 .signup-page {
-  min-height: 100vh;
-  width: 100%;
-  background: url('../assets/Hero.png.png') center center / cover no-repeat;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
+    min-height: 100vh;            /* ✅ full viewport */
+    width: 100%;
+    height: auto;                 /* ✅ expand with content */
+   
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  
 
 .signup-overlay {
   position: fixed;

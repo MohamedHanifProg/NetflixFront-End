@@ -1,18 +1,20 @@
 .footer {
-    position: static;
-    background: rgba(0, 0, 0, 0.85);
+    background-color: rgba(0, 0, 0, 0.5);; /* ✅ semi-transparent so image is visible */
+    backdrop-filter: blur(1px);           /* ✅ optional blur effect for elegance */
     color: #757575;
     font-size: 0.9rem;
-    padding: 40px 20px;
+    
     box-sizing: border-box;
     width: 100%;
-    margin-top: 60px;
+   
+    position: relative; /* ensure it layers correctly */
   }
+  
   
   .footer-title {
     margin-bottom: 24px;
     font-size: 1rem;
-    margin-left: 335px;
+    margin-left: 360px;
   }
   
   .footer-title a {
@@ -41,7 +43,7 @@
   
   .footer-lang {
     margin-top: 10px;
-    margin-left: 335px;
+    margin-left: 360px;
   }
   
   .language-select {
