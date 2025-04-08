@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.signup-page {
+  min-height: 100vh;
+  width: 100%;
+  background: url('../assets/Hero.png.png') center center / cover no-repeat;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.signup-overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 0;
+}
+
+/* Signup form layout */
+.signup-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  padding-top: 100px;
+  padding-bottom: 120px;
+}
+
+.signup-box {
+  background-color: rgba(0, 0, 0, 0.75);
+  padding: 60px 40px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: white;
+  margin-bottom: 64px;
+}
+
+.signup-box h1 {
+  margin: 0 0 10px;
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.signup-box input {
+  padding: 12px;
+  background-color: #333;
+  border: 1px solid #8c8c8c;
+  border-radius: 4px;
+  color: white;
+  font-size: 1rem;
+}
+
+.signup-box input::placeholder {
+  color: #8c8c8c;
+}
+
+.signup-box button {
+  background-color: #e50914;
+  border: none;
+  padding: 14px;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.signup-box button:hover {
+  background-color: #f6121d;
+}
+
+/* Google reCAPTCHA notice */
+.recaptcha-note {
+  color: #8c8c8c;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.recaptcha-note a {
+  color: #0071eb;
+  text-decoration: none;
+}
+
+.recaptcha-note a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive for mobile */
+@media (max-width: 480px) {
+  .signup-box {
+    padding: 40px 20px;
+    max-width: 100%;
+  }
+
+  .signup-box h1 {
+    font-size: 1.5rem;
+  }
+
+  .signup-box input,
+  .signup-box button {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
+}
