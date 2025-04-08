@@ -1,33 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  
-  body {
-    background: url('../assets/Hero.png') center / cover no-repeat;
-    font-family: 'Roboto', sans-serif;
-  }
-  
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
 
-.signup-page {
-    min-height: 100vh;            /* ✅ full viewport */
-    width: 100%;
-    height: auto;                 /* ✅ expand with content */
-   
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: scroll;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  
+.login-page {
+  min-height: 100%;
+  width: 100%;
+  background-image: url('../assets/Hero.png.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
 
-.signup-overlay {
+.login-overlay {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -35,18 +26,16 @@ html, body {
   z-index: 0;
 }
 
-/* Signup form layout */
-.signup-content {
+.login-content {
   position: relative;
   z-index: 1;
   width: 100%;
   max-width: 450px;
   margin: 0 auto;
-  padding-top: 100px;
-  padding-bottom: 120px;
+  margin-top: 64px;
 }
 
-.signup-box {
+.login-box {
   background-color: rgba(0, 0, 0, 0.75);
   padding: 60px 40px;
   border-radius: 8px;
@@ -57,13 +46,13 @@ html, body {
   margin-bottom: 64px;
 }
 
-.signup-box h1 {
+.login-box h1 {
   margin: 0 0 10px;
   font-weight: bold;
   font-size: 2rem;
 }
 
-.signup-box input {
+.login-box input {
   padding: 12px;
   background-color: #333;
   border: 1px solid #8c8c8c;
@@ -72,11 +61,11 @@ html, body {
   font-size: 1rem;
 }
 
-.signup-box input::placeholder {
+.login-box input::placeholder {
   color: #8c8c8c;
 }
 
-.signup-box button {
+.login-box button {
   background-color: #e50914;
   border: none;
   padding: 14px;
@@ -87,11 +76,10 @@ html, body {
   cursor: pointer;
 }
 
-.signup-box button:hover {
+.login-box button:hover {
   background-color: #f6121d;
 }
 
-/* Google reCAPTCHA notice */
 .recaptcha-note {
   color: #8c8c8c;
   font-size: 0.9rem;
@@ -107,37 +95,35 @@ html, body {
 
 .recaptcha-note a:hover {
   text-decoration: underline;
-}
-.signup-now {
-    font-size: 0.95rem;
-    color: white; /* ✅ make entire text white */
-    
-    
+}.forgot-password {
+    text-align: center;
+    margin-top: 8px;
   }
   
-  .signup-now a {
+  .forgot-password a {
     color: white;
     text-decoration: none;
-    font-weight: bold;
+    font-size: 0.9rem;
   }
   
-  .signup-now a:hover {
+  .forgot-password a:hover {
     text-decoration: underline;
   }
   
-/* Responsive for mobile */
+
+/* Responsive */
 @media (max-width: 480px) {
-  .signup-box {
+  .login-box {
     padding: 40px 20px;
     max-width: 100%;
   }
 
-  .signup-box h1 {
+  .login-box h1 {
     font-size: 1.5rem;
   }
 
-  .signup-box input,
-  .signup-box button {
+  .login-box input,
+  .login-box button {
     font-size: 0.95rem;
     padding: 12px;
   }
