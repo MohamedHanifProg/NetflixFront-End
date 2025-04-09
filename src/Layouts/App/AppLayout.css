@@ -1,7 +1,11 @@
 .app-layout {
-    background-color: #141414;  /* Plain dark background */
-    min-height: 100vh;
-    padding: 0; 
-    /* Add any global app page styling here */
-  }
-  
+  min-height: 100vh;
+  width: 100%;
+  /* ❌ Remove this background */
+  /* background: url('../../assets/Hero2.png') center center / cover no-repeat; */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+  background-color: #141414; /* add this instead */
+}

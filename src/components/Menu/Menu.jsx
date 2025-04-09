@@ -6,7 +6,13 @@ const Menu = () => {
   return (
     <nav className="menu-bar">
       <div className="menu-left">
-      
+        <Link to="/home">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png"
+            alt="Netflix"
+            className="menu-logo"
+          />
+        </Link>
 
         <ul className="menu-links">
           <li><Link to="/home">Home</Link></li>

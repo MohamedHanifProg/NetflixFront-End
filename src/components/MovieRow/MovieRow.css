@@ -1,0 +1,73 @@
+.category-row {
+    padding: 30px 40px;
+  }
+  
+  .category-row h3 {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    color: white;
+  }
+  
+  .row-items {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE/Edge */
+  }
+  
+  .row-items::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  
+  
+  .program-card img {
+    width: 200px;
+    border-radius: 4px;
+    transition: transform 0.3s ease;
+  }
+  
+  .program-card img:hover {
+    transform: scale(1.08);
+  }
+  
+  /* ✅ Top 10 layout styles */
+  .top10-row {
+    gap: 28px;
+    align-items: flex-start;
+  }
+  
+  .top10-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .top10-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .rank-number {
+    font-size: 130px;
+    font-weight: 900;
+    color: white;
+    font-family: 'Arial Black', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    line-height: 1;
+  }
+  
+  .top10-image {
+    width: 109px;
+    height: 154px;
+    border-radius: 4px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .top10-image:hover {
+    transform: scale(1.08);
+  }
+  
