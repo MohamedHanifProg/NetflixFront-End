@@ -1,14 +1,30 @@
-.auth-layout {
-    /* This can be minimal because your Login and Signup styles already
-       include the hero background and other styling */
+.auth-page {
     min-height: 100vh;
+    background-image: url('../../assets/Hero.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    display: flex;
+    flex-direction: column;
     position: relative;
   }
   
+  .auth-overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 0;
+  }
+  
   .auth-content {
-    /* Center your content if needed. You can override some spacing here if required */
     position: relative;
     z-index: 1;
-    padding-top: 64px;  /* Example spacing */
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    padding-top: 100px;
+    padding-bottom: 120px;
   }
   
