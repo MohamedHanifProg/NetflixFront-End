@@ -1,0 +1,7 @@
+.app-layout {
+    background-color: #141414;  /* Plain dark background */
+    min-height: 100vh;
+    padding: 0; 
+    /* Add any global app page styling here */
+  }
+  

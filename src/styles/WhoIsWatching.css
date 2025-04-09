@@ -1,0 +1,79 @@
+/* Main container: centered box with content starting 76px from the top */
+.whos-watching-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 67px;
+    background: var(--Grey-Grey-900, #141414);  /* Updated background color */
+    min-height: calc(100vh - 76px);
+    padding-top: 176px;
+    color: #FFF;
+  }
+  
+  
+  /* Page Title: “Who’s watching?” with exact typography */
+  .page-title {
+    color: var(--Primary-White, #FFF);
+    font-family: ABeeZee, sans-serif;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  
+  /* Profiles Container: holds all profile boxes in one row */
+  /* The profiles group is placed under the title by (34px if you prefer that instead of the 67px gap, 
+     adjust the container’s margin-top below if needed) */
+  /* Existing rules ... */
+
+/* Profiles Container */
+.profiles-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 29px;
+  }
+  
+  .profile-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 11px; 
+  }
+  
+  .profile-image {
+    width: 144px;
+    height: 144px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  
+  .profile-name {
+    color: var(--Grey-Grey-200, #808080);
+    font-family: ABeeZee, sans-serif;
+    font-size: 18px;
+    line-height: 22px;
+    margin: 0;
+  }
+  
+  .add-profile {
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .add-placeholder {
+    width: 144px;
+    height: 144px;
+    border-radius: 4px;
+    background-color: #141414; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .plus-icon {
+    width: 78px;  
+    height: 78px;
+    object-fit: contain;
+  }
+  

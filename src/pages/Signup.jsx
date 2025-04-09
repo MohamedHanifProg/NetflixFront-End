@@ -1,7 +1,7 @@
-import { useState } from 'react';
+// src/pages/Signup.jsx
+import React, { useState } from 'react';
 import '../styles/Signup.css';
-import Header from '../components/Header/Header';
-import Footer from '../components/Footer/Footer';
+import AuthLayout from '../Layouts/Auth/AuthLayout';
 
 function Signup() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -13,14 +13,11 @@ function Signup() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Signup submitted:', form);
+    // TODO: Connect to backend signup logic
   };
 
   return (
-    <div className="signup-page">
-      <div className="signup-overlay"></div>
-
-      <Header />
-
+    <AuthLayout>
       <div className="signup-content">
         <form className="signup-box" onSubmit={handleSubmit}>
           <h1>Sign Up</h1>
@@ -41,18 +38,19 @@ function Signup() {
             required
           />
           <button type="submit">Sign Up</button>
-
           <p className="recaptcha-note">
             This page is protected by Google reCAPTCHA to ensure you're not a bot.{' '}
-            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://policies.google.com/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Learn more.
             </a>
           </p>
         </form>
       </div>
-
-      <Footer />
-    </div>
+    </AuthLayout>
   );
 }
 

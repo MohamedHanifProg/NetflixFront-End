@@ -1,0 +1,14 @@
+.auth-layout {
+    /* This can be minimal because your Login and Signup styles already
+       include the hero background and other styling */
+    min-height: 100vh;
+    position: relative;
+  }
+  
+  .auth-content {
+    /* Center your content if needed. You can override some spacing here if required */
+    position: relative;
+    z-index: 1;
+    padding-top: 64px;  /* Example spacing */
+  }
+  
