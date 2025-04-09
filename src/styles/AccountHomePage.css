@@ -1,0 +1,69 @@
+.homepage-container {
+    padding-top: 80px;
+    background-color: #141414;
+    color: white;
+  }
+  
+  .cover-section {
+    height: 60vh;
+    background: url('../../assets/cover-example.jpg') center/cover no-repeat;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 40px;
+  }
+  
+  .cover-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    width: 100%;
+  }
+  
+  .cover-content {
+    max-width: 600px;
+  }
+  
+  .cover-title {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .cover-subtitle {
+    color: #b3b3b3;
+    font-weight: bold;
+  }
+  
+  .cover-description {
+    margin-bottom: 1rem;
+  }
+  
+  .more-info-btn {
+    background-color: #e50914;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .category-row {
+    padding: 30px 40px;
+  }
+  
+  .category-row h3 {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+  }
+  
+  .row-items {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+  }
+  
+  .program-card img {
+    width: 200px;
+    height: 120px;
+    border-radius: 4px;
+  }
+  
