@@ -1,38 +1,43 @@
-import React from 'react';
-import './Menu.css';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
+import "./Menu.css";
 
-const Menu = () => {
+function Menu() {
   return (
     <nav className="menu-bar">
       <div className="menu-left">
-        <Link to="/home">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png"
-            alt="Netflix"
-            className="menu-logo"
-          />
-        </Link>
-
-        <ul className="menu-links">
-          <li><Link to="/home">Home</Link></li>
-          <li><Link to="#">TV Shows</Link></li>
-          <li><Link to="#">Movies</Link></li>
-          <li><Link to="#">New & Popular</Link></li>
-          <li><Link to="#">My List</Link></li>
-          <li><Link to="#">Browse</Link></li>
-        </ul>
-      </div>
-
-      <div className="menu-right">
         <img
-          src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
-          alt="User Avatar"
-          className="menu-avatar"
+          src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png"
+          alt="Netflix Logo"
+          className="menu-logo"
         />
+        <Link to="/">Home</Link>
+        <Link to="#">TV Shows</Link>
+        <Link to="#">Movies</Link>
+        <Link to="#">New & Popular</Link>
+        <Link to="#">My List</Link>
+        <Link to="#">Browse</Link>
       </div>
+      <div className="menu-right">
+  <button className="icon-button">
+    <i className="fas fa-search"></i>
+  </button>
+  <button className="icon-button">
+    <i className="fas fa-bell"></i>
+  </button>
+
+  <div className="profile-container">
+    <img
+      className="profile-avatar"
+      src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
+      alt="User Avatar"
+    />
+    <i className="fas fa-caret-down dropdown-icon"></i>
+  </div>
+</div>
+
     </nav>
   );
-};
+}
 
 export default Menu;

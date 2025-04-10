@@ -1,0 +1,51 @@
+.account-footer {
+    background-color: #141414;
+    color: #999;
+    padding: 200px;
+    font-size: 0.85rem;
+  }
+  
+  .footer-social {
+    display: flex;
+    gap: 20px;
+    font-size: 1.2rem;
+    margin-bottom: 24px;
+  }
+  
+  .footer-social i {
+    cursor: pointer;
+  }
+  
+  .footer-links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .footer-links-grid a {
+    color: #999;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 6px;
+  }
+  
+  .footer-links-grid a:hover {
+    text-decoration: underline;
+  }
+  
+  .service-code-btn {
+    background: none;
+    border: 1px solid #666;
+    color: #999;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .footer-note {
+    font-size: 0.75rem;
+    color: #666;
+  }
+  

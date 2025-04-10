@@ -1,28 +1,31 @@
 .homepage-container {
-    /* Remove or comment out the padding-top line */
-    /* padding-top: 80px; */
     background-color: #141414;
     color: white;
   }
   
+  /* ✅ Cover section with image from TMDB */
   .cover-section {
     height: 100vh;
     position: relative;
     display: flex;
-    align-items: flex-start; /* change from flex-end */
-    padding:32px 40px 40px 40px; /* top padding = menu height + spacing */
-    background: url('../assets/Hero2.png') center center / cover no-repeat;
+    align-items: flex-start;
+    padding: 32px 40px 40px 40px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #000;
   }
   
   .cover-overlay {
     margin-top: 64px;
     width: 100%;
+    
+    padding-bottom: 40px;
   }
   
   .cover-content {
     max-width: 600px;
   }
-
   
   .cover-title {
     font-size: 3rem;
@@ -30,19 +33,22 @@
   }
   
   .cover-subtitle {
-    color: #b3b3b3;
+   
     font-weight: bold;
   }
   
   .cover-description {
     margin-bottom: 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: rgb(249, 244, 244)
   }
   
   .more-info-btn {
     display: flex;
     align-items: center;
     gap: 8px;
-    background-color: rgba(109, 109, 110, 0.7); /* Netflix style */
+    background-color: rgba(109, 109, 110, 0.7);
     color: white;
     font-size: 1rem;
     font-weight: 500;
@@ -63,24 +69,9 @@
     fill: white;
   }
   
+  /* Section rows */
   .category-row {
     padding: 30px 40px;
-  }
-  .row-items {
-    display: flex;
-    gap: 16px;
-    overflow-x: auto;
-    padding-bottom: 16px;
-  }
-  
-  .program-card img {
-    width: 200px;
-    border-radius: 4px;
-    transition: transform 0.3s ease;
-  }
-  
-  .program-card img:hover {
-    transform: scale(1.08);
   }
   
   .category-row h3 {
@@ -92,11 +83,17 @@
     display: flex;
     gap: 16px;
     overflow-x: auto;
+    padding-bottom: 16px;
   }
   
   .program-card img {
     width: 200px;
     height: 120px;
     border-radius: 4px;
+    transition: transform 0.3s ease;
+  }
+  
+  .program-card img:hover {
+    transform: scale(1.08);
   }
   

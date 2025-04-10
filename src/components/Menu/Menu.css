@@ -1,47 +1,69 @@
 .menu-bar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 70px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 40px;
-    z-index: 100;
-    
+    height: 64px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+    z-index: 999;
   }
   
   .menu-left {
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 20px;
   }
   
   .menu-logo {
-    height: 32px;
+    height: 36px;
   }
   
-  .menu-links {
-    display: flex;
-    list-style: none;
-    gap: 25px;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .menu-links li a {
+  .menu-left a {
     color: white;
     text-decoration: none;
-    font-weight: 500;
     font-size: 0.95rem;
+    font-weight: 500;
   }
   
-  .menu-links li a:hover {
+  .menu-left a:hover {
     text-decoration: underline;
   }
   
-  .menu-right .menu-avatar {
-    height: 36px;
+  .menu-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  
+  .icon-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+  
+  .profile-avatar {
+    width: 32px;
+    height: 32px;
     border-radius: 4px;
+    object-fit: cover;
+    cursor: pointer;
+    
+  }
+  .profile-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    margin-right: 100px;
+  }
+  
+  .dropdown-icon {
+    color: white;
+    font-size: 0.8rem;
   }
   

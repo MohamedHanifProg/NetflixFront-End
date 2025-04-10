@@ -2,34 +2,50 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AppLayout from '../Layouts/App/AppLayout';
 import Menu from '../components/Menu/Menu';
-import Footer from '../components/Footer/Footer';
+import AccountFooter from '../components/Footer/AccountFooter';
 import MovieRow from '../components/MovieRow/MovieRow';
 import '../styles/AccountHomePage.css';
 
-const API_KEY = 'd106e624423e4ff54c95bbf11b358dc7';
+const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const BASE = 'https://api.themoviedb.org/3';
 
 const AccountHomePage = () => {
   const [rows, setRows] = useState({});
+  const [coverMovie, setCoverMovie] = useState(null);
 
-  const fetchRow = async (key, url) => {
+  // ✅ Reusable fetcher with optional limit
+  const fetchRow = async (key, url, limit = 20) => {
     try {
       const res = await axios.get(`${BASE}${url}&api_key=${API_KEY}`);
-      setRows((prev) => ({ ...prev, [key]: res.data.results }));
+      const limited = res.data.results.slice(0, limit);
+      setRows((prev) => ({ ...prev, [key]: limited }));
     } catch (err) {
       console.error(`Failed to load ${key}:`, err);
     }
   };
 
-  useEffect(() => {
-    fetchRow('matched', '/discover/movie?sort_by=popularity.desc');
+  // ✅ Random cover from popular movies
+  const fetchCover = async () => {
+    try {
+      const res = await axios.get(`${BASE}/discover/movie?sort_by=popularity.desc&api_key=${API_KEY}`);
+      const picks = res.data.results.slice(0, 4);
+      const random = picks[Math.floor(Math.random() * picks.length)];
+      setCoverMovie(random);
+    } catch (err) {
+      console.error('Failed to fetch cover movie:', err);
+    }
+  };
 
-    fetchRow('netflix', '/discover/tv?with_networks=213');
-    fetchRow('top10', '/movie/top_rated?region=US');
+  useEffect(() => {
+    fetchCover();
+
+    fetchRow('matched', '/discover/movie?sort_by=popularity.desc');
+    fetchRow('netflix', '/discover/tv?with_networks=213',10);
+    fetchRow('top10', '/movie/top_rated?region=US', 10); // ✅ only top 10
     fetchRow('love', '/discover/movie?sort_by=popularity.desc');
     fetchRow('animation', '/discover/movie?with_genres=16');
     fetchRow('inspiring', '/search/movie?query=inspiring');
-    fetchRow('watchlist', '/trending/all/day');
+    fetchRow('watchlist', '/discover/movie?sort_by=popularity.desc'); // ✅ safe for "Continue Watching"
     fetchRow('weekend', '/discover/movie?with_runtime.lte=90');
     fetchRow('critics', '/movie/top_rated');
     fetchRow('fresh', '/discover/movie?sort_by=vote_average.desc');
@@ -41,21 +57,31 @@ const AccountHomePage = () => {
       <Menu />
 
       <main className="homepage-container">
-        {/* Cover Section */}
-        <section className="cover-section">
+        {/* ✅ Dynamic cover with backdrop */}
+        <section
+          className="cover-section"
+          style={{
+            backgroundImage: coverMovie
+              ? `url(https://image.tmdb.org/t/p/original${coverMovie.backdrop_path})`
+              : undefined,
+          }}
+        >
           <div className="cover-overlay">
             <div className="cover-content">
               <p className="cover-subtitle">N SERIES</p>
-              <div className="cover-title">
-                <div className="title-top"><div>HOUSE</div><div>OF</div></div>
-                <div className="title-bottom">NINJAS</div>
-              </div>
+              <h1 className="cover-title">
+                {coverMovie?.title || coverMovie?.name}
+              </h1>
               <p className="cover-description">
-                Years after retiring from their ninja lives, a dysfunctional family must return to secret missions...
+                {coverMovie?.overview}
               </p>
               <button className="more-info-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48..."></path>
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 
+                           10-4.48 10-10S17.52 2 12 2zm0 
+                           3c.83 0 1.5.67 1.5 1.5S12.83 
+                           8 12 8s-1.5-.67-1.5-1.5S11.17 
+                           5 12 5zm1 13h-2v-6h2v6z" />
                 </svg>
                 More Info
               </button>
@@ -63,17 +89,10 @@ const AccountHomePage = () => {
           </div>
         </section>
 
-        {/* Rows */}
+        {/* ✅ Dynamic Movie Rows */}
         <MovieRow title="Matched for You" movies={rows.matched} />
         <MovieRow title="Now on Netflix" movies={rows.netflix} />
-        <MovieRow
-  title="Top 10 movies in the U.S. Today"
-  movies={rows.top10}
-  showRanking={true}
-/>
-
-
-
+        <MovieRow title="Top 10 movies in the U.S. Today" movies={rows.top10} showRanking={true} />
         <MovieRow title="We Think You'll Love These" movies={rows.love} />
         <MovieRow title="Animation" movies={rows.animation} />
         <MovieRow title="Inspiring Movies" movies={rows.inspiring} />
@@ -84,7 +103,7 @@ const AccountHomePage = () => {
         <MovieRow title="Adult Animation" movies={rows.adultAnimation} />
       </main>
 
-      <Footer />
+      <AccountFooter />
     </AppLayout>
   );
 };
