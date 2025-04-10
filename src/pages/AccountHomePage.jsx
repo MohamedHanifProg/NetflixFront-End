@@ -39,7 +39,7 @@ const AccountHomePage = () => {
   useEffect(() => {
     fetchCover();
 
-    fetchRow('matched', '/discover/movie?sort_by=popularity.desc');
+    fetchRow('matched', '/discover/movie?sort_by=popularity.desc',10);
     fetchRow('netflix', '/discover/tv?with_networks=213',10);
     fetchRow('top10', '/movie/top_rated?region=US', 10); // ✅ only top 10
     fetchRow('love', '/discover/movie?sort_by=popularity.desc');
@@ -68,7 +68,10 @@ const AccountHomePage = () => {
         >
           <div className="cover-overlay">
             <div className="cover-content">
-              <p className="cover-subtitle">N SERIES</p>
+            <p className="cover-subtitle">
+  <span className="n-letter">N</span> S E R I E S
+</p>
+
               <h1 className="cover-title">
                 {coverMovie?.title || coverMovie?.name}
               </h1>

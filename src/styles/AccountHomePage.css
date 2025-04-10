@@ -36,6 +36,15 @@
    
     font-weight: bold;
   }
+ 
+  
+  .n-letter {
+    color: #e50914;
+    font-size: 1.2rem;
+    margin-right: 6px;
+    font-weight: 900;
+  }
+  
   
   .cover-description {
     margin-bottom: 1rem;
