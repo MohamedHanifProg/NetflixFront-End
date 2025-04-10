@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import AppLayout from '../layouts/App/AppLayout';
+import AppLayout from '../Layouts/App/AppLayout';
 import Menu from '../components/Menu/Menu';
 import Footer from '../components/Footer/Footer';
 import MovieRow from '../components/MovieRow/MovieRow';
