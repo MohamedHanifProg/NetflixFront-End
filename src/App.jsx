@@ -6,6 +6,7 @@ import AccountHomePage from './pages/AccountHomePage';
 import TvShows from './pages/TvShows';
 import Movies from './pages/Movies'
 
+
 function App() {
   return (
     <Routes>
@@ -16,6 +17,7 @@ function App() {
       <Route path="/tv-shows" element={<TvShows />} />
       <Route path="/movies" element={<Movies />} />
 
+      <Route path="/home" element={<AccountHomePage />} /> 
     </Routes>
   );
 }
