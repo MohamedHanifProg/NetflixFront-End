@@ -210,11 +210,6 @@
   align-items: center;
 }
 
-/* line-1, line-2, line-3, line-4 
-   We'll add margins for the vertical spacing you specified. */
-.line-1 {
-  /* no top margin needed, assume it's at the top */
-}
 .line-2 {
   margin-top: 8px; /* If needed, or 0 if you want them closer */
 }

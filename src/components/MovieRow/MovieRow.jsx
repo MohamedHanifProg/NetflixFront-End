@@ -1,9 +1,10 @@
+// src/components/MovieRow/MovieRow.jsx
 import React from 'react';
 import './MovieRow.css';
 
 const IMG_BASE = 'https://image.tmdb.org/t/p/w300';
 
-const MovieRow = ({ title, movies, showRanking = false }) => {
+const MovieRow = ({ title, movies, showRanking = false, onMoreInfo }) => {
   if (!movies || movies.length === 0) return null;
 
   return (
@@ -16,6 +17,7 @@ const MovieRow = ({ title, movies, showRanking = false }) => {
             <div
               className={`program-card ${showRanking ? 'top10-card' : ''}`}
               key={movie.id}
+              onClick={() => onMoreInfo && onMoreInfo(movie)}
             >
               {showRanking ? (
                 <div className="top10-wrapper">
