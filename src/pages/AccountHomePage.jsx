@@ -1,9 +1,11 @@
+// src/pages/AccountHomePage.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AppLayout from '../Layouts/App/AppLayout';
 import Menu from '../components/Menu/Menu';
 import AccountFooter from '../components/Footer/AccountFooter';
 import MovieRow from '../components/MovieRow/MovieRow';
+import MovieDetailsModal from '../components/DetailsModal/MovieDetailsModal';
 import '../styles/AccountHomePage.css';
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -13,7 +15,11 @@ const AccountHomePage = () => {
   const [rows, setRows] = useState({});
   const [coverMovie, setCoverMovie] = useState(null);
 
-  // ✅ Reusable fetcher with optional limit
+  // State for modal visibility and the movie to display in the modal
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // Reusable fetcher function with optional limit
   const fetchRow = async (key, url, limit = 20) => {
     try {
       const res = await axios.get(`${BASE}${url}&api_key=${API_KEY}`);
@@ -24,7 +30,7 @@ const AccountHomePage = () => {
     }
   };
 
-  // ✅ Random cover from popular movies
+  // Fetch the cover movie (a popular movie) and select a random one from the first four
   const fetchCover = async () => {
     try {
       const res = await axios.get(`${BASE}/discover/movie?sort_by=popularity.desc&api_key=${API_KEY}`);
@@ -38,26 +44,31 @@ const AccountHomePage = () => {
 
   useEffect(() => {
     fetchCover();
-
-    fetchRow('matched', '/discover/movie?sort_by=popularity.desc',10);
-    fetchRow('netflix', '/discover/tv?with_networks=213',10);
-    fetchRow('top10', '/movie/top_rated?region=US', 10); // ✅ only top 10
+    fetchRow('matched', '/discover/movie?sort_by=popularity.desc', 10);
+    fetchRow('netflix', '/discover/tv?with_networks=213', 10);
+    fetchRow('top10', '/movie/top_rated?region=US', 10);
     fetchRow('love', '/discover/movie?sort_by=popularity.desc');
     fetchRow('animation', '/discover/movie?with_genres=16');
     fetchRow('inspiring', '/search/movie?query=inspiring');
-    fetchRow('watchlist', '/discover/movie?sort_by=popularity.desc'); // ✅ safe for "Continue Watching"
+    fetchRow('watchlist', '/discover/movie?sort_by=popularity.desc');
     fetchRow('weekend', '/discover/movie?with_runtime.lte=90');
     fetchRow('critics', '/movie/top_rated');
     fetchRow('fresh', '/discover/movie?sort_by=vote_average.desc');
     fetchRow('adultAnimation', '/discover/tv?with_genres=16&include_adult=true');
   }, []);
 
+  // When a user clicks "More Info", update the selectedMovie and open the modal.
+  const handleMoreInfo = (movie) => {
+    setSelectedMovie(movie);
+    setModalOpen(true);
+  };
+
   return (
     <AppLayout>
       <Menu />
 
       <main className="homepage-container">
-        {/* ✅ Dynamic cover with backdrop */}
+        {/* Cover Section */}
         <section
           className="cover-section"
           style={{
@@ -68,17 +79,19 @@ const AccountHomePage = () => {
         >
           <div className="cover-overlay">
             <div className="cover-content">
-            <p className="cover-subtitle">
-  <span className="n-letter">N</span> S E R I E S
-</p>
-
+              <p className="cover-subtitle">
+                <span className="n-letter">N</span> SERIES
+              </p>
               <h1 className="cover-title">
                 {coverMovie?.title || coverMovie?.name}
               </h1>
               <p className="cover-description">
                 {coverMovie?.overview}
               </p>
-              <button className="more-info-btn">
+              <button
+                className="more-info-btn"
+                onClick={() => handleMoreInfo(coverMovie)}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 
                            10-4.48 10-10S17.52 2 12 2zm0 
@@ -92,21 +105,28 @@ const AccountHomePage = () => {
           </div>
         </section>
 
-        {/* ✅ Dynamic Movie Rows */}
-        <MovieRow title="Matched for You" movies={rows.matched} />
-        <MovieRow title="Now on Netflix" movies={rows.netflix} />
-        <MovieRow title="Top 10 movies in the U.S. Today" movies={rows.top10} showRanking={true} />
-        <MovieRow title="We Think You'll Love These" movies={rows.love} />
-        <MovieRow title="Animation" movies={rows.animation} />
-        <MovieRow title="Inspiring Movies" movies={rows.inspiring} />
-        <MovieRow title="Continue Watching for You" movies={rows.watchlist} />
-        <MovieRow title="Watch in One Weekend" movies={rows.weekend} />
-        <MovieRow title="Critically Acclaimed" movies={rows.critics} />
-        <MovieRow title="Today's Fresh Picks for You" movies={rows.fresh} />
-        <MovieRow title="Adult Animation" movies={rows.adultAnimation} />
+        {/* Movie Rows */}
+        <MovieRow title="Matched for You" movies={rows.matched} onMoreInfo={handleMoreInfo} />
+        <MovieRow title="Now on Netflix" movies={rows.netflix} onMoreInfo={handleMoreInfo} />
+        <MovieRow title="Top 10 movies in the U.S. Today" movies={rows.top10} showRanking={true} onMoreInfo={handleMoreInfo} />
+        <MovieRow title="We Think You'll Love These" movies={rows.love} onMoreInfo={handleMoreInfo} />
+        <MovieRow title="Animation" movies={rows.animation} onMoreInfo={handleMoreInfo} />
+        <MovieRow title="Inspiring Movies" movies={rows.inspiring} onMoreInfo={handleMoreInfo} />
+        <MovieRow title="Continue Watching for You" movies={rows.watchlist} onMoreInfo={handleMoreInfo} />
+        <MovieRow title="Watch in One Weekend" movies={rows.weekend} onMoreInfo={handleMoreInfo} />
+        <MovieRow title="Critically Acclaimed" movies={rows.critics} onMoreInfo={handleMoreInfo} />
+        <MovieRow title="Today's Fresh Picks for You" movies={rows.fresh} onMoreInfo={handleMoreInfo} />
+        <MovieRow title="Adult Animation" movies={rows.adultAnimation} onMoreInfo={handleMoreInfo} />
       </main>
 
       <AccountFooter />
+
+      {/* Movie Details Modal renders dynamically with API-fetched data */}
+      <MovieDetailsModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        movie={selectedMovie}
+      />
     </AppLayout>
   );
 };
