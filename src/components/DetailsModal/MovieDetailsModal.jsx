@@ -16,40 +16,45 @@ const BASE = 'https://api.themoviedb.org/3';
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
 function MovieDetailsModal({ isOpen, onClose, movie }) {
-  // Local state for additional movie details
   const [movieDetails, setMovieDetails] = useState(null);
 
   useEffect(() => {
     if (movie) {
       const fetchDetails = async () => {
         try {
-          // For movies; if it's a TV show, use the /tv/{id} endpoint instead.
+          const isTV = movie?.name && !movie?.title;
           const res = await axios.get(
-            `${BASE}/movie/${movie.id}?api_key=${API_KEY}&append_to_response=credits`
+            `${BASE}/${isTV ? 'tv' : 'movie'}/${movie.id}?api_key=${API_KEY}&append_to_response=credits`
           );
           setMovieDetails(res.data);
         } catch (err) {
-          console.error('Failed to fetch movie details:', err);
+          console.error('Failed to fetch details:', err);
         }
       };
       fetchDetails();
     }
   }, [movie]);
 
-  // If modal is not open or details not fetched yet, render nothing.
   if (!isOpen || !movieDetails) return null;
+
+  const isTV = movie?.name && !movie?.title;
+  const title = movieDetails.title || movieDetails.name;
+  const releaseYear = (movieDetails.release_date || movieDetails.first_air_date || '').slice(0, 4);
+  const runtime = isTV
+    ? `${movieDetails.number_of_seasons} season${movieDetails.number_of_seasons > 1 ? 's' : ''}`
+    : `${movieDetails.runtime} min`;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      {/* Stop propagation so clicks inside don’t close the modal */}
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        {/* Hero Section */}
         <div className="modal-hero">
           <img
-            src={movieDetails.backdrop_path 
-                 ? `https://image.tmdb.org/t/p/original${movieDetails.backdrop_path}`
-                 : movie.coverImage}
-            alt={movieDetails.title}
+            src={
+              movieDetails.backdrop_path
+                ? `https://image.tmdb.org/t/p/original${movieDetails.backdrop_path}`
+                : movie.coverImage
+            }
+            alt={title}
             className="modal-cover-img"
           />
 
@@ -60,9 +65,9 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
           <div className="series-info">
             <div className="series-line1">
               <img src={netflixNIcon} alt="Netflix N" className="netflix-n-logo" />
-              <span className="series-type-text">Series</span>
+              <span className="series-type-text">{isTV ? 'Series' : 'Movie'}</span>
             </div>
-            <h2 className="series-title">{movieDetails.title}</h2>
+            <h2 className="series-title">{title}</h2>
           </div>
 
           <div className="buttons-row">
@@ -80,65 +85,46 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
           </div>
         </div>
 
-        {/* Movie Info Section */}
         <div className="movie-info-section">
           <div className="movie-info-left">
             <div className="info-line line-1">
               <span className="info-new">New</span>
-              <span className="info-seasons">{movieDetails.release_date?.slice(0, 4)} • {movieDetails.runtime} min</span>
-              <img
-                className="video-quality-icon"
-                src={videoQualityIcon}
-                alt="HD"
-              />
+              <span className="info-seasons">{releaseYear} • {runtime}</span>
+              <img className="video-quality-icon" src={videoQualityIcon} alt="HD" />
               <img className="ad-icon" src={adIcon} alt="AD" />
             </div>
 
             <div className="info-line line-2">
               <img className="smaller-icon" src={smallerIcon} alt="smaller" />
-              <span className="info-warnings">
-                {/* For now, static; later you can combine warnings like "smoking, violence" */}
-                smoking, violence
-              </span>
+              <span className="info-warnings">smoking, violence</span>
             </div>
 
             <div className="info-line line-3">
               <img className="label-icon" src={labelIcon} alt="Label" />
-              <span className="info-ranking">#2 in TV Shows Today</span>
+              <span className="info-ranking">#2 in {isTV ? 'TV Shows' : 'Movies'} Today</span>
             </div>
 
             <div className="info-line line-4">
-              <p className="info-description">
-                {movieDetails.overview}
-              </p>
+              <p className="info-description">{movieDetails.overview}</p>
             </div>
           </div>
 
           <div className="movie-info-right">
             <div className="info-row">
               <span className="info-gray">Cast:</span>
-              {/* Extract cast names from movieDetails.credits.cast */}
               <span className="info-white">
-                {movieDetails.credits?.cast
-                  ?.slice(0, 3)
-                  .map((member) => member.name)
-                  .join(', ') || 'N/A'}
+                {movieDetails.credits?.cast?.slice(0, 3).map((c) => c.name).join(', ') || 'N/A'}
               </span>
             </div>
             <div className="info-row">
               <span className="info-gray">Genre:</span>
               <span className="info-white">
-                {movieDetails.genres
-                  ?.map((genre) => genre.name)
-                  .join(', ') || 'N/A'}
+                {movieDetails.genres?.map((g) => g.name).join(', ') || 'N/A'}
               </span>
             </div>
             <div className="info-row">
-              <span className="info-gray">This show is:</span>
-              <span className="info-white">
-                {/* Example static descriptors; you might derive these from movieDetails later */}
-                Dark, Suspenseful, Exciting
-              </span>
+              <span className="info-gray">This {isTV ? 'series' : 'movie'} is:</span>
+              <span className="info-white">Dark, Suspenseful, Exciting</span>
             </div>
           </div>
         </div>
