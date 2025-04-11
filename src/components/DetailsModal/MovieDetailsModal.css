@@ -1,348 +1,347 @@
 /* Full-screen modal overlay */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  }
-  
-  .modal-container {
-    background-color: #141414;
-    width: 59vw;
-    max-width: 850px;
-    border-radius: 4px 4px 0px 0px;
-    overflow: hidden;
-    position: relative;
-  }
-  
-  /* Hero section with fixed dimensions */
-  .modal-hero {
-    position: relative;
-    width: 100%;
-    height: 481px;
-    flex-shrink: 0;
-  }
-  
-  /* Cover image behind the overlay */
-  .modal-cover-img {
-    width: 850px;  /* For a 1440px design, this is 850px */
-    height: 481px;
-    object-fit: cover;
-    position: relative;
-    z-index: 1;
-  }
-  
-  /* Gradient overlay only over the image */
-  .modal-hero::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(180deg, rgba(24,24,24,0) 48.5%, #181818 100%);
-    z-index: 2;
-    pointer-events: none;
-  }
-  
-  /* Raise interactive elements above the overlay */
-  .modal-close-btn,
-  .series-info,
-  .buttons-row {
-    position: relative;
-    z-index: 3;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-container {
+  background-color: #141414;
+  width: 59vw;
+  max-width: 850px;
+  border-radius: 4px 4px 0px 0px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Hero section with fixed dimensions */
+.modal-hero {
+  position: relative;
+  width: 100%;
+  height: 481px;
+  flex-shrink: 0;
+}
+
+/* Cover image behind the overlay */
+.modal-cover-img {
+  width: 850px;  /* For a 1440px design, this is 850px */
+  height: 481px;
+  object-fit: cover;
+  position: relative;
+  z-index: 1;
+}
+
+/* Gradient overlay only over the image */
+.modal-hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(24,24,24,0) 48.5%, #181818 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Raise interactive elements above the overlay */
+.modal-close-btn,
+.series-info,
+.buttons-row {
+  position: relative;
+  z-index: 3;
+}
+
 
 .series-info {
-    position: absolute;
-    top: 205px;
-    left: 48px;
-    width: 340px;
-    display: flex;
-    flex-direction: column;              
-  }
-  
-  .series-line1 {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  /* The "Series" text styling */
-  .series-type-text {
-    font-family: 'ABeeZee', sans-serif;
-    font-size: 16px;         /* adjust as needed */
-    font-weight: 400;        /* or 500 if you want a bit bolder */
-    color: #fff;             /* white text */
-    line-height: 24px;       /* to match your design specs */
-  }
-  
-  /* Second line: large bold series title */
-  .series-title {
-    font-family: "Netflix Sans", sans-serif;
-    font-size: 30px;  /* or your desired large font size */
-    font-weight: 700; /* bold text */
-    color: #fff;
-    margin: 0;        /* remove default <h2> margin if needed */
-    line-height: normal;
-  }
-  
-  
-  /* Close button: positioned 16px from the top and right */
-  .modal-close-btn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-  }
-  
-  .modal-close-btn img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-  
-  
-  
-  /* Series logo: adjust the dimensions as needed */
-  .series-logo {
-    width: 50px;      /* Adjust if needed */
-    height: auto;
-  }
-  
-  /* Series title: style with your desired font, size, and color */
-  .series-title {
-    font-family: 'ABeeZee', sans-serif;
-    font-size: 30px;   /* Adjust as necessary */
-    color: #fff;
-  }
-  
-  /* Buttons row: positioned 32px below the series info container */
-  .buttons-row {
-    position: absolute;
-    top: calc(205px + 136px + 32px); /* 205 + 136 + 32 = 373px */
-    left: 48px;
-    right: 48px; /* ensures mute button is 48px from the right edge */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  /* Group for left buttons: review and plus button */
-  .left-buttons {
-    display: flex;
-    gap: 8px; /* 8px gap between Review and Plus buttons */
-  }
-  
-  /* Review button: 119px width, 43px height, with padding */
-  .review-btn {
-    display: flex;
-    width: 119px;
-    height: 43px;
-    padding: 8px 26px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 4px;
-    font-size: 14px; /* Adjust as needed */
-    cursor: pointer;
-  }
-  
-  .plus-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .plus-btn img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    
-  }
+  position: absolute;
+  top: 205px;
+  left: 48px;
+  width: 340px;
+  display: flex;
+  flex-direction: column;              
+}
 
-  .mute-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
+.series-line1 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* The "Series" text styling */
+.series-type-text {
+  font-family: 'ABeeZee', sans-serif;
+  font-size: 16px;         /* adjust as needed */
+  font-weight: 400;        /* or 500 if you want a bit bolder */
+  color: #fff;             /* white text */
+  line-height: 24px;       /* to match your design specs */
+}
+
+/* Second line: large bold series title */
+.series-title {
+  font-family: "Netflix Sans", sans-serif;
+  font-size: 30px;  /* or your desired large font size */
+  font-weight: 700; /* bold text */
+  color: #fff;
+  margin: 0;        /* remove default <h2> margin if needed */
+  line-height: normal;
+}
+
+
+/* Close button: positioned 16px from the top and right */
+.modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.modal-close-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+
+
+/* Series logo: adjust the dimensions as needed */
+.series-logo {
+  width: 50px;      /* Adjust if needed */
+  height: auto;
+}
+
+/* Series title: style with your desired font, size, and color */
+.series-title {
+  font-family: 'ABeeZee', sans-serif;
+  font-size: 30px;   /* Adjust as necessary */
+  color: #fff;
+}
+
+/* Buttons row: positioned 32px below the series info container */
+.buttons-row {
+  position: absolute;
+  top: calc(205px + 136px + 32px); /* 205 + 136 + 32 = 373px */
+  left: 48px;
+  right: 48px; /* ensures mute button is 48px from the right edge */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Group for left buttons: review and plus button */
+.left-buttons {
+  display: flex;
+  gap: 8px; /* 8px gap between Review and Plus buttons */
+}
+
+/* Review button: 119px width, 43px height, with padding */
+.review-btn {
+  display: flex;
+  width: 119px;
+  height: 43px;
+  padding: 8px 26px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  font-size: 14px; /* Adjust as needed */
+  cursor: pointer;
+}
+
+.plus-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.plus-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   
-  .mute-btn img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-  
- /* ================== */
+}
+
+.mute-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.mute-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ================== */
 /* Info Section Styles */
 /* ================== */
 
 /* Outer container: 754×207 for the section */
 .movie-info-section {
-    width: 754px;
-    height: 207px;
-    margin: 0 auto; /* center horizontally within the modal */
-    display: flex;
-    justify-content: space-between;
-    padding: 24px; /* some padding on the edges if desired */
-    box-sizing: border-box;
-  }
-  
-  /* Left Column: Lines 1–4 */
-  .movie-info-left {
-    display: flex;
-    flex-direction: column;
-    gap: 0; /* We'll control spacing line by line */
-  }
-  
-  /* Each line is horizontally laid out */
-  .info-line {
-    display: flex;
-    align-items: center;
-  }
-  
-  /* line-1, line-2, line-3, line-4 
-     We'll add margins for the vertical spacing you specified. */
-  .line-1 {
-    /* no top margin needed, assume it's at the top */
-  }
-  .line-2 {
-    margin-top: 8px; /* If needed, or 0 if you want them closer */
-  }
-  .line-3 {
-    margin-top: 15px; /* 15px below line-2 as requested */
-  }
-  .line-4 {
-    margin-top: 17px; /* 17px below line-3 as requested */
-    max-width: 400px; /* Limit width of description if desired */
-  }
-  
-  /* "New" - green style */
-  .info-new {
-    color: #46D369; /* var(--Secondary-Green) */
-    font-family: ABeeZee, sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 24px; /* 150% */
-    letter-spacing: 0.5px;
-    margin-right: 8px; /* small gap */
-  }
-  
-  /* "3 Seasons 2024" - gray style */
-  .info-seasons {
-    color: #BCBCBC; /* var(--Grey-Grey-50) */
-    font-family: ABeeZee, sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: normal;
-    margin-right: 8px;
-  }
-  
-  /* HD icon (videoQuality), AD icon, etc. */
-  .video-quality-icon {
-    display: flex;
-    height: 16px;
-    padding: 10px 6.5px;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-right: 8px; /* space between icons */
-  }
-  
-  .ad-icon {
-    width: 39px;
-    height: 16px;
-    margin-right: 8px; /* spacing if needed */
-    flex-shrink: 0;
-    object-fit: contain;
-  }
-  
-  /* line-2 smaller icon + text */
-  .smaller-icon {
-    width: 61px;
-    height: 20px;
+  width: 754px;
+  height: 207px;
+  margin: 0 auto; /* center horizontally within the modal */
+  display: flex;
+  justify-content: space-between;
+  padding: 24px; /* some padding on the edges if desired */
+  box-sizing: border-box;
+}
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 9.091px;
-    margin-right: 8px;
-  }
-  
+/* Left Column: Lines 1–4 */
+.movie-info-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* We'll control spacing line by line */
+}
 
-  .info-warnings {
-    color: #FFF; 
-    font-family: "Netflix Sans", sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 18px;
-  }
-  
-  .label-icon {
-    display: flex;
+/* Each line is horizontally laid out */
+.info-line {
+  display: flex;
+  align-items: center;
+}
 
-    height: 30px;
-    align-items: center;
-    gap: 10.428px;
-    margin-right: 8px;
-    object-fit: contain;
-  }
-  
+/* line-1, line-2, line-3, line-4 
+   We'll add margins for the vertical spacing you specified. */
+.line-1 {
+  /* no top margin needed, assume it's at the top */
+}
+.line-2 {
+  margin-top: 8px; /* If needed, or 0 if you want them closer */
+}
+.line-3 {
+  margin-top: 15px; /* 15px below line-2 as requested */
+}
+.line-4 {
+  margin-top: 17px; /* 17px below line-3 as requested */
+  max-width: 400px; /* Limit width of description if desired */
+}
 
-  .info-ranking {
-    color: #FFF; 
-    font-family: "Netflix Sans", sans-serif;
-    font-size: 20.856px; 
-    font-weight: 500;
-    letter-spacing: -0.435px;
-  }
-  
+/* "New" - green style */
+.info-new {
+  color: #46D369; /* var(--Secondary-Green) */
+  font-family: ABeeZee, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+  letter-spacing: 0.5px;
+  margin-right: 8px; /* small gap */
+}
 
-  .info-description {
-    color: #FFF; 
-    font-family: "Netflix Sans", sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 18px; 
-    margin: 0;
-  }
-  
-  /* Right Column: 3 rows (cast, genre, this show is) */
-  .movie-info-right {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; /* align at top */
-    gap: 14px; /* 14px spacing between each row */
-  }
-  
-  /* Each row with a gray label and white text */
-  .info-row {
-    display: flex;
-    gap: 6px;
-  }
-  
-  .info-gray {
-    color: #777; /* var(--Grey-Grey-250) */
-    font-family: "Netflix Sans", sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px; /* 142.857% */
-  }
-  
-  .info-white {
-    color: #FFF; /* var(--Primary-White) */
-    font-family: "Netflix Sans", sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px;
-  }
-  
+/* "3 Seasons 2024" - gray style */
+.info-seasons {
+  color: #BCBCBC; /* var(--Grey-Grey-50) */
+  font-family: ABeeZee, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  margin-right: 8px;
+}
+
+/* HD icon (videoQuality), AD icon, etc. */
+.video-quality-icon {
+  display: flex;
+  height: 16px;
+  padding: 10px 6.5px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-right: 8px; /* space between icons */
+}
+
+.ad-icon {
+  width: 39px;
+  height: 16px;
+  margin-right: 8px; /* spacing if needed */
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+/* line-2 smaller icon + text */
+.smaller-icon {
+  width: 61px;
+  height: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9.091px;
+  margin-right: 8px;
+}
+
+
+.info-warnings {
+  color: #FFF; 
+  font-family: "Netflix Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.label-icon {
+  display: flex;
+
+  height: 30px;
+  align-items: center;
+  gap: 10.428px;
+  margin-right: 8px;
+  object-fit: contain;
+}
+
+
+.info-ranking {
+  color: #FFF; 
+  font-family: "Netflix Sans", sans-serif;
+  font-size: 20.856px; 
+  font-weight: 500;
+  letter-spacing: -0.435px;
+}
+
+
+.info-description {
+  color: #FFF; 
+  font-family: "Netflix Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px; 
+  margin: 0;
+}
+
+/* Right Column: 3 rows (cast, genre, this show is) */
+.movie-info-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* align at top */
+  gap: 14px; /* 14px spacing between each row */
+}
+
+/* Each row with a gray label and white text */
+.info-row {
+  display: flex;
+  gap: 6px;
+}
+
+.info-gray {
+  color: #777; /* var(--Grey-Grey-250) */
+  font-family: "Netflix Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+}
+
+.info-white {
+  color: #FFF; /* var(--Primary-White) */
+  font-family: "Netflix Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}

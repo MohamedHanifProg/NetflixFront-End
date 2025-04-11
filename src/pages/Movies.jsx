@@ -1,25 +1,19 @@
-// src/pages/AccountHomePage.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AppLayout from '../Layouts/App/AppLayout';
 import Menu from '../components/Menu/Menu';
 import AccountFooter from '../components/Footer/AccountFooter';
 import MovieRow from '../components/MovieRow/MovieRow';
-import MovieDetailsModal from '../components/DetailsModal/MovieDetailsModal';
-import '../styles/AccountHomePage.css';
+import '../styles/AccountHomePage.css'; // or your movie page style
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const BASE = 'https://api.themoviedb.org/3';
 
-const AccountHomePage = () => {
+const Movies = () => {
   const [rows, setRows] = useState({});
   const [coverMovie, setCoverMovie] = useState(null);
 
-  // State for modal visibility and the movie to display in the modal
-  const [selectedMovie, setSelectedMovie] = useState(null);
-  const [modalOpen, setModalOpen] = useState(false);
-
-  // Reusable fetcher function with optional limit
+  // Reusable fetcher with optional limit
   const fetchRow = async (key, url, limit = 20) => {
     try {
       const res = await axios.get(`${BASE}${url}&api_key=${API_KEY}`);
@@ -30,7 +24,7 @@ const AccountHomePage = () => {
     }
   };
 
-  // Fetch the cover movie (a popular movie) and select a random one from the first four
+  // Random cover from popular movies
   const fetchCover = async () => {
     try {
       const res = await axios.get(`${BASE}/discover/movie?sort_by=popularity.desc&api_key=${API_KEY}`);
@@ -44,28 +38,24 @@ const AccountHomePage = () => {
 
   useEffect(() => {
     fetchCover();
+
+    // Example rows for Movies:
     fetchRow('matched', '/discover/movie?sort_by=popularity.desc', 10);
-    fetchRow('netflix', '/discover/tv?with_networks=213', 10);
     fetchRow('top10', '/movie/top_rated?region=US', 10);
     fetchRow('love', '/discover/movie?sort_by=popularity.desc');
     fetchRow('animation', '/discover/movie?with_genres=16');
     fetchRow('inspiring', '/search/movie?query=inspiring');
-    fetchRow('watchlist', '/discover/movie?sort_by=popularity.desc');
+    fetchRow('watchlist', '/discover/movie?sort_by=popularity.desc'); // or use your custom watchlist logic
     fetchRow('weekend', '/discover/movie?with_runtime.lte=90');
     fetchRow('critics', '/movie/top_rated');
     fetchRow('fresh', '/discover/movie?sort_by=vote_average.desc');
-    fetchRow('adultAnimation', '/discover/tv?with_genres=16&include_adult=true');
+    // Add more if you like
   }, []);
-
-  // When a user clicks "More Info", update the selectedMovie and open the modal.
-  const handleMoreInfo = (movie) => {
-    setSelectedMovie(movie);
-    setModalOpen(true);
-  };
 
   return (
     <AppLayout>
-      <Menu />
+      {/* Pass an "activePage" prop or similar to highlight Movies in your menu */}
+      <Menu activePage="movies" />
 
       <main className="homepage-container">
         {/* Cover Section */}
@@ -80,7 +70,7 @@ const AccountHomePage = () => {
           <div className="cover-overlay">
             <div className="cover-content">
               <p className="cover-subtitle">
-                <span className="n-letter">N</span> SERIES
+                <span className="n-letter">N</span> S E R I E S
               </p>
               <h1 className="cover-title">
                 {coverMovie?.title || coverMovie?.name}
@@ -88,10 +78,7 @@ const AccountHomePage = () => {
               <p className="cover-description">
                 {coverMovie?.overview}
               </p>
-              <button
-                className="more-info-btn"
-                onClick={() => handleMoreInfo(coverMovie)}
-              >
+              <button className="more-info-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 
                            10-4.48 10-10S17.52 2 12 2zm0 
@@ -106,29 +93,20 @@ const AccountHomePage = () => {
         </section>
 
         {/* Movie Rows */}
-        <MovieRow title="Matched for You" movies={rows.matched} onMoreInfo={handleMoreInfo} />
-        <MovieRow title="Now on Netflix" movies={rows.netflix} onMoreInfo={handleMoreInfo} />
-        <MovieRow title="Top 10 movies in the U.S. Today" movies={rows.top10} showRanking={true} onMoreInfo={handleMoreInfo} />
-        <MovieRow title="We Think You'll Love These" movies={rows.love} onMoreInfo={handleMoreInfo} />
-        <MovieRow title="Animation" movies={rows.animation} onMoreInfo={handleMoreInfo} />
-        <MovieRow title="Inspiring Movies" movies={rows.inspiring} onMoreInfo={handleMoreInfo} />
-        <MovieRow title="Continue Watching for You" movies={rows.watchlist} onMoreInfo={handleMoreInfo} />
-        <MovieRow title="Watch in One Weekend" movies={rows.weekend} onMoreInfo={handleMoreInfo} />
-        <MovieRow title="Critically Acclaimed" movies={rows.critics} onMoreInfo={handleMoreInfo} />
-        <MovieRow title="Today's Fresh Picks for You" movies={rows.fresh} onMoreInfo={handleMoreInfo} />
-        <MovieRow title="Adult Animation" movies={rows.adultAnimation} onMoreInfo={handleMoreInfo} />
+        <MovieRow title="Matched for You" movies={rows.matched} />
+        <MovieRow title="Top 10 Movies in the U.S. Today" movies={rows.top10} showRanking={true} />
+        <MovieRow title="We Think You'll Love These" movies={rows.love} />
+        <MovieRow title="Animation" movies={rows.animation} />
+        <MovieRow title="Inspiring Movies" movies={rows.inspiring} />
+        <MovieRow title="Continue Watching for You" movies={rows.watchlist} />
+        <MovieRow title="Watch in One Weekend" movies={rows.weekend} />
+        <MovieRow title="Critically Acclaimed" movies={rows.critics} />
+        <MovieRow title="Today's Fresh Picks for You" movies={rows.fresh} />
       </main>
 
       <AccountFooter />
-
-      {/* Movie Details Modal renders dynamically with API-fetched data */}
-      <MovieDetailsModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        movie={selectedMovie}
-      />
     </AppLayout>
   );
 };
 
-export default AccountHomePage;
+export default Movies;

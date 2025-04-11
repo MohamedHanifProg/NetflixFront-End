@@ -3,7 +3,8 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import WhoIsWatching from './pages/WhoIsWatching';
 import AccountHomePage from './pages/AccountHomePage';
-import TestModal from './pages/TestModal'; // import test page
+import TvShows from './pages/TvShows';
+import Movies from './pages/Movies'
 
 function App() {
   return (
@@ -11,10 +12,13 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/profiles" element={<WhoIsWatching />} />
-      <Route path="/home" element={<AccountHomePage />} /> 
-      <Route path="/test-modal" element={<TestModal />} />
+      <Route path="/home" element={<AccountHomePage />} />
+      <Route path="/tv-shows" element={<TvShows />} />
+      <Route path="/movies" element={<Movies />} />
+
     </Routes>
   );
 }
 
 export default App;
+
