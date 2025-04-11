@@ -1,4 +1,3 @@
-// ✅ Movies.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AppLayout from '../Layouts/App/AppLayout';
@@ -17,9 +16,11 @@ const Movies = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
+  // ✅ FIX: Proper API key injection regardless of query string presence
   const fetchRow = async (key, url, limit = 20) => {
     try {
-      const res = await axios.get(`${BASE}${url}&api_key=${API_KEY}`);
+      const connector = url.includes('?') ? '&' : '?';
+      const res = await axios.get(`${BASE}${url}${connector}api_key=${API_KEY}`);
       const limited = res.data.results.slice(0, limit);
       setRows((prev) => ({ ...prev, [key]: limited }));
     } catch (err) {
