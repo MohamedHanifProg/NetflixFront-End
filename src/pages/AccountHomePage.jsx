@@ -1,4 +1,3 @@
-// src/pages/AccountHomePage.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AppLayout from '../Layouts/App/AppLayout';
@@ -14,15 +13,14 @@ const BASE = 'https://api.themoviedb.org/3';
 const AccountHomePage = () => {
   const [rows, setRows] = useState({});
   const [coverMovie, setCoverMovie] = useState(null);
-
-  // State for modal visibility and the movie to display in the modal
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // Reusable fetcher function with optional limit
+  // ✅ Reusable fetcher with proper query string handling
   const fetchRow = async (key, url, limit = 20) => {
     try {
-      const res = await axios.get(`${BASE}${url}&api_key=${API_KEY}`);
+      const connector = url.includes('?') ? '&' : '?';
+      const res = await axios.get(`${BASE}${url}${connector}api_key=${API_KEY}`);
       const limited = res.data.results.slice(0, limit);
       setRows((prev) => ({ ...prev, [key]: limited }));
     } catch (err) {
@@ -30,7 +28,7 @@ const AccountHomePage = () => {
     }
   };
 
-  // Fetch the cover movie (a popular movie) and select a random one from the first four
+  // ✅ Fetch random movie for the main cover
   const fetchCover = async () => {
     try {
       const res = await axios.get(`${BASE}/discover/movie?sort_by=popularity.desc&api_key=${API_KEY}`);
@@ -57,7 +55,6 @@ const AccountHomePage = () => {
     fetchRow('adultAnimation', '/discover/tv?with_genres=16&include_adult=true');
   }, []);
 
-  // When a user clicks "More Info", update the selectedMovie and open the modal.
   const handleMoreInfo = (movie) => {
     setSelectedMovie(movie);
     setModalOpen(true);
@@ -68,7 +65,7 @@ const AccountHomePage = () => {
       <Menu />
 
       <main className="homepage-container">
-        {/* Cover Section */}
+        {/* ✅ Cover Section */}
         <section
           className="cover-section"
           style={{
@@ -82,16 +79,9 @@ const AccountHomePage = () => {
               <p className="cover-subtitle">
                 <span className="n-letter">N</span> SERIES
               </p>
-              <h1 className="cover-title">
-                {coverMovie?.title || coverMovie?.name}
-              </h1>
-              <p className="cover-description">
-                {coverMovie?.overview}
-              </p>
-              <button
-                className="more-info-btn"
-                onClick={() => handleMoreInfo(coverMovie)}
-              >
+              <h1 className="cover-title">{coverMovie?.title || coverMovie?.name}</h1>
+              <p className="cover-description">{coverMovie?.overview}</p>
+              <button className="more-info-btn" onClick={() => handleMoreInfo(coverMovie)}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 
                            10-4.48 10-10S17.52 2 12 2zm0 
@@ -105,7 +95,7 @@ const AccountHomePage = () => {
           </div>
         </section>
 
-        {/* Movie Rows */}
+        {/* ✅ Movie Rows */}
         <MovieRow title="Matched for You" movies={rows.matched} onMoreInfo={handleMoreInfo} />
         <MovieRow title="Now on Netflix" movies={rows.netflix} onMoreInfo={handleMoreInfo} />
         <MovieRow title="Top 10 movies in the U.S. Today" movies={rows.top10} showRanking={true} onMoreInfo={handleMoreInfo} />
@@ -121,7 +111,7 @@ const AccountHomePage = () => {
 
       <AccountFooter />
 
-      {/* Movie Details Modal renders dynamically with API-fetched data */}
+      {/* ✅ Modal with selected movie */}
       <MovieDetailsModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
