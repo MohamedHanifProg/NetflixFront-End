@@ -40,7 +40,7 @@
   
   /* Uniform Select Box Style */
   .browse-select {
-    background-color: transparent;
+    background-color: #141414; /* use dark background */
     border: 1px solid #999;
     color: white;
     font-size: 0.95rem;
@@ -49,6 +49,13 @@
     font-family: inherit;
     cursor: pointer;
   }
+  
+  /* Force option elements to inherit the dark background and white text */
+  .browse-select option {
+    background-color: #141414;
+    color: white;
+  }
+  
   
   .browse-select:focus {
     outline: none;
