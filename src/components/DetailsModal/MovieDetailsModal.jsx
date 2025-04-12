@@ -1,9 +1,9 @@
-// src/components/detailsModal/MovieDetailsModal.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import './MovieDetailsModal.css';
 
-// Import static assets (adjust paths/names as needed)
+// Static assets
 import closeIcon from '../../assets/exiticon.png';
 import plusButtonIcon from '../../assets/PlusButton.png';
 import muteButtonIcon from '../../assets/MuteButton.png';
@@ -19,17 +19,19 @@ const BASE = 'https://api.themoviedb.org/3';
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
 function MovieDetailsModal({ isOpen, onClose, movie }) {
-  // State for detailed movie/TV info fetched via API
   const [movieDetails, setMovieDetails] = useState(null);
-  // For TV series: state for season 1 episodes
   const [episodes, setEpisodes] = useState(null);
+  const navigate = useNavigate();
 
-  // Fetch full details when a movie is provided
+  // ✅ Navigate to Review page
+  const handleReviewClick = () => {
+    navigate('/review', { state: { movie } });
+  };
+
   useEffect(() => {
     if (movie) {
       const fetchDetails = async () => {
         try {
-          // Determine whether the title is a TV series (TV shows typically have a "name" property)
           const isTV = movie?.name && !movie?.title;
           const endpoint = `${BASE}/${isTV ? 'tv' : 'movie'}/${movie.id}?api_key=${API_KEY}&append_to_response=credits`;
           const res = await axios.get(endpoint);
@@ -42,7 +44,6 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
     }
   }, [movie]);
 
-  // For TV series, fetch episodes for Season 1 once movieDetails have been fetched
   useEffect(() => {
     const isTV = movie?.name && !movie?.title;
     if (isTV && movie) {
@@ -59,7 +60,6 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
     }
   }, [movie]);
 
-  // Don't render until modal is open and movieDetails are available
   if (!isOpen || !movieDetails) return null;
 
   const isTV = movie?.name && !movie?.title;
@@ -71,7 +71,6 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      {/* Prevent clicks inside modal from closing it */}
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
         {/* HERO SECTION */}
         <div className="modal-hero">
@@ -87,7 +86,7 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
           <button className="modal-close-btn" onClick={onClose}>
             <img src={closeIcon} alt="Close" />
           </button>
-          {/* SERIES INFO: two-line layout */}
+
           <div className="series-info">
             <div className="series-line1">
               <img src={netflixNIcon} alt="Netflix N" className="netflix-n-logo" />
@@ -95,11 +94,14 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
             </div>
             <h2 className="series-title">{title}</h2>
           </div>
+
           <div className="buttons-row">
             <div className="left-buttons">
-              <button className="review-btn">
+              {/* ✅ REVIEW BUTTON */}
+              <button className="review-btn" onClick={handleReviewClick}>
                 <img src={reviewButton} alt="Review" />
               </button>
+
               <button className="plus-btn">
                 <img src={plusButtonIcon} alt="Add to List" />
               </button>
@@ -151,7 +153,7 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
           </div>
         </div>
 
-        {/* EPISODES SECTION (only for TV series) */}
+        {/* EPISODES (TV only) */}
         {isTV && episodes && episodes.length > 0 && (
           <div className="episodes-section">
             <div className="episodes-header">

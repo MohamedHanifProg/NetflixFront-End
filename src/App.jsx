@@ -5,6 +5,10 @@ import WhoIsWatching from './pages/WhoIsWatching';
 import AccountHomePage from './pages/AccountHomePage';
 import TvShows from './pages/TvShows';
 import Movies from './pages/Movies'
+import Review from './pages/Review';
+
+
+
 
 
 function App() {
@@ -16,7 +20,7 @@ function App() {
       <Route path="/home" element={<AccountHomePage />} />
       <Route path="/tv-shows" element={<TvShows />} />
       <Route path="/movies" element={<Movies />} />
-
+      <Route path="/review" element={<Review />} />
       <Route path="/home" element={<AccountHomePage />} /> 
     </Routes>
   );

@@ -1,0 +1,52 @@
+.review-page {
+    padding: 40px;
+    max-width: 600px;
+    margin: 0 auto;
+    color: white;
+  }
+  
+  .movie-title {
+    margin-bottom: 16px;
+    color: #ccc;
+  }
+  
+  .review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .review-form textarea {
+    min-height: 120px;
+    padding: 10px;
+    font-size: 1rem;
+    resize: vertical;
+    border-radius: 6px;
+    border: none;
+  }
+  
+  .review-options label {
+    margin-right: 20px;
+    font-size: 0.9rem;
+  }
+  
+  .review-stars {
+    font-size: 1.8rem;
+    color: #777;
+    cursor: pointer;
+  }
+  
+  .review-stars .filled {
+    color: gold;
+  }
+  
+  .review-form button {
+    background-color: #e50914;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
