@@ -72,7 +72,7 @@ const Movies = () => {
           <div className="cover-overlay">
             <div className="cover-content">
               <p className="cover-subtitle">
-                <span className="n-letter">N</span> S E R I E S
+                <span className="n-letter">N</span> M O V I E S
               </p>
               <h1 className="cover-title">
                 {coverMovie?.title || coverMovie?.name}

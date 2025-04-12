@@ -94,7 +94,7 @@ const AccountHomePage = () => {
           <div className="cover-overlay">
             <div className="cover-content">
               <p className="cover-subtitle">
-                <span className="n-letter">N</span> SERIES
+              <span className="n-letter">N</span> S E R I E S
               </p>
               <h1 className="cover-title">
                 {coverMovie?.title || coverMovie?.name}
