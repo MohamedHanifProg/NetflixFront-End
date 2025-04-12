@@ -1,19 +1,45 @@
+// src/pages/Login.jsx
 import React, { useState } from 'react';
 import '../styles/Login.css';
 import AuthLayout from '../Layouts/Auth/AuthLayout';
+import { useNavigate } from 'react-router-dom';
+import API_URL from '../config';
 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '', remember: false });
-
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({ ...form, [name]: type === 'checkbox' ? checked : value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login submitted:', form);
-    // TODO: Connect to backend authentication
+    setError(null);
+
+    try {
+      const response = await fetch(`${API_URL}/api/users/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || 'Login failed');
+        return;
+      }
+
+      console.log('Login successful:', data);
+      // Save the token in localStorage or context if needed
+      localStorage.setItem('token', data.token);
+      // Redirect to the dashboard or WhoIsWatching page
+      navigate('/profiles');
+    } catch (err) {
+      console.error(err);
+      setError('An error occurred. Please try again.');
+    }
   };
 
   return (
@@ -21,6 +47,7 @@ function Login() {
       <div className="login-content">
         <form className="login-box" onSubmit={handleSubmit}>
           <h1>Sign In</h1>
+          {error && <div className="error">{error}</div>}
           <input
             type="text"
             name="email"
