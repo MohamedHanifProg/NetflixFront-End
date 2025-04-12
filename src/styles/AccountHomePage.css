@@ -33,17 +33,20 @@
   }
   
   .cover-subtitle {
-   
+    display: flex;
+    align-items: center; /* vertically center the text next to the N */
     font-weight: bold;
+    font-size: 1rem; /* smaller font for 'Movies' or 'Series' */
   }
- 
   
   .n-letter {
     color: #e50914;
-    font-size: 1.2rem;
-    margin-right: 6px;
+    font-size: 2rem; /* make the N big */
     font-weight: 900;
+    margin-right: 6px;
+    line-height: 1;
   }
+  
   
   
   .cover-description {

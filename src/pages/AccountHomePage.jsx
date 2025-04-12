@@ -15,7 +15,6 @@ const AccountHomePage = () => {
   const [rows, setRows] = useState({});
   const [coverMovie, setCoverMovie] = useState(null);
   
-  // State for modal visibility and the movie to display in the modal
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -31,12 +30,19 @@ const AccountHomePage = () => {
     }
   };
 
-  // Fetch a popular cover movie and select one from the first four results
+  // Fetch a popular cover movie or TV show
   const fetchCover = async () => {
     try {
-      const res = await axios.get(`${BASE}/discover/movie?sort_by=popularity.desc&api_key=${API_KEY}`);
-      const picks = res.data.results.slice(0, 4);
-      const random = picks[Math.floor(Math.random() * picks.length)];
+      const [moviesRes, tvRes] = await Promise.all([
+        axios.get(`${BASE}/discover/movie?sort_by=popularity.desc&api_key=${API_KEY}`),
+        axios.get(`${BASE}/discover/tv?sort_by=popularity.desc&api_key=${API_KEY}`)
+      ]);
+
+      const movies = moviesRes.data.results.map(m => ({ ...m, media_type: 'movie' }));
+      const tvShows = tvRes.data.results.map(t => ({ ...t, media_type: 'tv' }));
+
+      const combined = [...movies.slice(0, 2), ...tvShows.slice(0, 2)];
+      const random = combined[Math.floor(Math.random() * combined.length)];
       setCoverMovie(random);
     } catch (err) {
       console.error('Failed to fetch cover movie:', err);
@@ -47,7 +53,7 @@ const AccountHomePage = () => {
     fetchCover();
     fetchRow('matched', '/discover/movie?sort_by=popularity.desc', 10);
     fetchRow('netflix', '/discover/tv?with_networks=213', 10);
-    fetchRow('top10', '/movie/top_rated?region=US', 10); // only top 10
+    fetchRow('top10', '/movie/top_rated?region=US', 10);
     fetchRow('love', '/discover/movie?sort_by=popularity.desc');
     fetchRow('animation', '/discover/movie?with_genres=16');
     fetchRow('inspiring', '/search/movie?query=inspiring');
@@ -58,20 +64,17 @@ const AccountHomePage = () => {
     fetchRow('adultAnimation', '/discover/tv?with_genres=16&include_adult=true');
   }, []);
 
-  // Prevent background scrolling when the modal is open
   useEffect(() => {
     if (modalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
-    // Cleanup to ensure overflow is reset when component unmounts
     return () => {
       document.body.style.overflow = '';
     };
   }, [modalOpen]);
 
-  // Handler to open the modal with the selected movie
   const handleMoreInfo = (movie) => {
     setSelectedMovie(movie);
     setModalOpen(true);
@@ -94,7 +97,8 @@ const AccountHomePage = () => {
           <div className="cover-overlay">
             <div className="cover-content">
               <p className="cover-subtitle">
-              <span className="n-letter">N</span> S E R I E S
+                <span className="n-letter">N</span>{' '}
+                {coverMovie?.media_type === 'tv' ? 'S E R I E S' : 'M O V I E S'}
               </p>
               <h1 className="cover-title">
                 {coverMovie?.title || coverMovie?.name}
