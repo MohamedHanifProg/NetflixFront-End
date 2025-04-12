@@ -3,17 +3,18 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './MovieDetailsModal.css';
 
-// Static assets
-import closeIcon from '../../assets/exiticon.png';
-import plusButtonIcon from '../../assets/PlusButton.png';
-import muteButtonIcon from '../../assets/MuteButton.png';
-import reviewButton from '../../assets/reviewButton.png';
-import smallerIcon from '../../assets/Smaller.png';
-import videoQualityIcon from '../../assets/VideoQuality.png';
-import adIcon from '../../assets/AD.png';
-import labelIcon from '../../assets/Label.png';
-import netflixNIcon from '../../assets/NetflixSmall.png';
-import playIcon from '../../assets/playIcon.png';
+// Static assets as constants (assuming these files exist in public/assets)
+const closeIcon = "/assets/exiticon.png";
+const plusButtonIcon = "/assets/PlusButton.png";
+const muteButtonIcon = "/assets/MuteButton.png";
+const reviewButton = "/assets/reviewButton.png";
+const smallerIcon = "/assets/Smaller.png";
+const videoQualityIcon = "/assets/VideoQuality.png";
+const adIcon = "/assets/AD.png";
+const labelIcon = "/assets/Label.png";
+const netflixNIcon = "/assets/NetflixSmall.png";
+const playIcon = "/assets/playIcon.png";
+
 
 const BASE = 'https://api.themoviedb.org/3';
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
