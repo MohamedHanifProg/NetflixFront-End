@@ -1,0 +1,35 @@
+.explore-page {
+    padding: 100px 40px 60px;
+    color: white;
+    min-height: 100vh;
+    background-color: #141414;
+  }
+  
+  .explore-title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 40px;
+  }
+  
+  .explore-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .explore-card {
+    width: 160px;
+    flex-grow: 1;
+    max-width: 200px;
+  }
+  
+  .explore-card img {
+    width: 100%;
+    border-radius: 4px;
+    transition: transform 0.2s ease;
+  }
+  
+  .explore-card img:hover {
+    transform: scale(1.05);
+  }
+  

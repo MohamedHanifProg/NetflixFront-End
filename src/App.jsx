@@ -6,10 +6,8 @@ import AccountHomePage from './pages/AccountHomePage';
 import TvShows from './pages/TvShows';
 import Movies from './pages/Movies'
 import Review from './pages/Review';
-
-
-
-
+import MyList from './pages/MyList';
+import NewAndPopular from './pages/NewAndPopular'; 
 
 function App() {
   return (
@@ -21,10 +19,12 @@ function App() {
       <Route path="/tv-shows" element={<TvShows />} />
       <Route path="/movies" element={<Movies />} />
       <Route path="/review" element={<Review />} />
-      <Route path="/home" element={<AccountHomePage />} /> 
+      <Route path="/mylist" element={<MyList />} />
+      <Route path="/new-popular" element={<NewAndPopular />} /> 
     </Routes>
   );
 }
+
 
 export default App;
 

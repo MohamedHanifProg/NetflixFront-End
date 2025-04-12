@@ -37,6 +37,7 @@
     align-items: center; /* vertically center the text next to the N */
     font-weight: bold;
     font-size: 1rem; /* smaller font for 'Movies' or 'Series' */
+    
   }
   
   .n-letter {
