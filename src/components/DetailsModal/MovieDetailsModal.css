@@ -13,13 +13,23 @@
 }
 
 .modal-container {
-  background-color: #141414;
-  width: 59vw;
-  max-width: 850px;
-  border-radius: 4px 4px 0px 0px;
-  overflow: hidden;
-  position: relative;
-}
+    background-color: #141414;
+    width: 59vw;
+    max-width: 850px;
+    border-radius: 4px 4px 0px 0px;
+    overflow-y: auto;       /* enable vertical scrolling */
+    overflow-x: hidden;     /* prevent horizontal scrolling */
+    position: relative;
+    max-height: 90vh;       /* ensure modal doesn't exceed viewport height */
+    -ms-overflow-style: none; /* hide scrollbar in IE and Edge */
+    scrollbar-width: none;    /* hide scrollbar in Firefox */
+  }
+  
+  /* Hide scrollbar for WebKit-based browsers (Chrome, Safari) */
+  .modal-container::-webkit-scrollbar {
+    display: none;
+  }
+  
 
 /* Hero section with fixed dimensions */
 .modal-hero {
@@ -340,3 +350,148 @@
   font-weight: 400;
   line-height: 20px;
 }
+
+
+/* ============== Episodes Section Styles ============== */
+
+/* Container for the entire Episodes section */
+.episodes-section {
+    margin-top: 48px;               /* 48px below the previous section */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;                      /* spacing between header and episodes list */
+    box-sizing: border-box;
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+  
+  /* Header row for Episodes section */
+  .episodes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Left side of header: "Episodes" text */
+  .episodes-header-left {
+    color: var(--Primary-White, #FFF);
+    font-family: ABeeZee, sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    /* Note: leading-trim and text-edge are non-standard—if needed, you may simulate them with padding/margins */
+  }
+  
+  /* Right side of header: Series name */
+  .episodes-header-right {
+    color: var(--Primary-White, #FFF);
+    font-family: ABeeZee, sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px; /* 122.222% */
+  }
+  
+  /* Container for the episodes list */
+  .episodes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 754px;
+    padding: 16px 52px 16px 16px;
+    box-sizing: border-box;
+  }
+  
+  /* Each episode row */
+  .episode-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+  }
+  
+  /* Episode number on the left */
+  .episode-number {
+    color: var(--Grey-Grey-20, #DCDCDC);
+    text-align: center;
+    font-family: ABeeZee, sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 30px; /* 125% */
+    width: 50px;       /* fixed width for alignment */
+  }
+  
+  /* Main content of the episode row */
+  .episode-main {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+  }
+  
+  /* Episode image wrapper */
+  .episode-image-wrapper {
+    position: relative;
+    flex-shrink: 0;
+  }
+  
+  /* Episode image styles */
+  .episode-image {
+    width: 128px;
+    height: 72px;
+    object-fit: cover;
+  }
+  
+  /* Play icon over the episode image */
+  .play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    pointer-events: none;
+  }
+  
+  
+  /* Episode details container (to the right of the image) */
+  .episode-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+  
+  /* Row containing the episode title and duration */
+  .episode-info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  
+  /* Episode title and duration styles */
+  .episode-title,
+  .episode-duration {
+    color: var(--Primary-White, #FFF);
+    font-family: ABeeZee, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  
+  /* Episode description (below the title/duration row) */
+  .episode-description {
+    color: var(--Grey-Grey-25, #D2D2D2);
+    font-family: "Netflix Sans", sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;  /* 142.857% */
+    margin: 0;
+  }
+  
