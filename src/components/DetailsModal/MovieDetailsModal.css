@@ -200,7 +200,7 @@
 .movie-info-section {
   width: 754px;
   height: 207px;
-  margin: 0 auto; /* center horizontally within the modal */
+  margin: 0 24px; /* center horizontally within the modal */
   display: flex;
   justify-content: space-between;
   padding: 24px; /* some padding on the edges if desired */
@@ -354,15 +354,14 @@
 
 /* ============== Episodes Section Styles ============== */
 
-/* Container for the entire Episodes section */
+/* Container for the entire Episodes section, aligned with modal content */
 .episodes-section {
-    margin-top: 48px;               /* 48px below the previous section */
+    margin: 48px 24px ;             /* 48px below the previous section */
+    padding: 0 24px;                /* 48px padding on left and right */
     display: flex;
     flex-direction: column;
-    gap: 16px;                      /* spacing between header and episodes list */
+    gap: 16px;                      /* Spacing between header and episodes list */
     box-sizing: border-box;
-    padding-left: 48px;
-    padding-right: 48px;
   }
   
   /* Header row for Episodes section */
@@ -370,9 +369,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
   }
   
-  /* Left side of header: "Episodes" text */
   .episodes-header-left {
     color: var(--Primary-White, #FFF);
     font-family: ABeeZee, sans-serif;
@@ -380,38 +379,50 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    /* Note: leading-trim and text-edge are non-standard—if needed, you may simulate them with padding/margins */
   }
   
-  /* Right side of header: Series name */
   .episodes-header-right {
     color: var(--Primary-White, #FFF);
     font-family: ABeeZee, sans-serif;
     font-size: 18px;
     font-style: normal;
     font-weight: 400;
-    line-height: 22px; /* 122.222% */
+    line-height: 22px;
   }
   
-  /* Container for the episodes list */
+  /* Episodes list container: now takes full width of episodes section */
   .episodes-list {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 754px;
-    padding: 16px 52px 16px 16px;
     box-sizing: border-box;
   }
   
-  /* Each episode row */
+  /* Each episode row expands the full width available in the episodes section */
   .episode-row {
     display: flex;
     align-items: center;
     gap: 16px;
     width: 100%;
+    border-bottom: 1px solid var(--Grey-Grey-450, #404040);
+    margin:16px 16px 0 0;
+    padding-bottom: 30px;
+  }
+  .episode-row.selected-row {
+    border-radius: 4px;
+    border-top: 1px solid var(--Grey-Grey-450, #404040);
+    border-bottom: 1px solid var(--Grey-Grey-450, #404040);
+    background: var(--Grey-Grey-600, #333);
+    padding-top: 16px;
+    padding-right: 16px;
   }
   
-  /* Episode number on the left */
+  .episode-row:last-child {
+    border-bottom: none;
+  }
+  
+  /* Episode number styling remains the same */
   .episode-number {
     color: var(--Grey-Grey-20, #DCDCDC);
     text-align: center;
@@ -423,7 +434,7 @@
     width: 50px;       /* fixed width for alignment */
   }
   
-  /* Main content of the episode row */
+  /* Episode main content fills remaining space */
   .episode-main {
     display: flex;
     align-items: center;
@@ -431,20 +442,27 @@
     flex: 1;
   }
   
-  /* Episode image wrapper */
+  /* Episode image wrapper; default styling */
   .episode-image-wrapper {
     position: relative;
     flex-shrink: 0;
   }
   
-  /* Episode image styles */
+  /* Special style for first episode's image wrapper */
+  .first-episode {
+    border-radius: 4px;
+    border-top: 1px solid var(--Grey-Grey-450, #404040);
+    border-bottom: 1px solid var(--Grey-Grey-450, #404040);
+  }
+  
+  /* Episode image styling */
   .episode-image {
     width: 128px;
     height: 72px;
     object-fit: cover;
   }
   
-  /* Play icon over the episode image */
+  /* Play icon (only appears in first episode) */
   .play-icon {
     position: absolute;
     top: 50%;
@@ -456,8 +474,7 @@
     pointer-events: none;
   }
   
-  
-  /* Episode details container (to the right of the image) */
+  /* Episode details container */
   .episode-details {
     display: flex;
     flex-direction: column;
@@ -465,15 +482,15 @@
     flex: 1;
   }
   
-  /* Row containing the episode title and duration */
+  /* Row for episode title and duration */
   .episode-info-row {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     gap: 16px;
   }
   
-  /* Episode title and duration styles */
+  /* Episode title and duration styling */
   .episode-title,
   .episode-duration {
     color: var(--Primary-White, #FFF);
@@ -484,14 +501,14 @@
     line-height: normal;
   }
   
-  /* Episode description (below the title/duration row) */
+  /* Episode description styling */
   .episode-description {
     color: var(--Grey-Grey-25, #D2D2D2);
     font-family: "Netflix Sans", sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 20px;  /* 142.857% */
+    line-height: 20px; /* 142.857% */
     margin: 0;
   }
   
