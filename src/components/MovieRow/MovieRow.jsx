@@ -25,7 +25,7 @@ const MovieRow = ({ title, movies, showRanking = false, onMoreInfo }) => {
                   <img
                     src={`${IMG_BASE}${movie.poster_path || movie.backdrop_path}`}
                     alt={movie.title || movie.name}
-                    className="top10-image"
+                    className="top10-image top"
                   />
                 </div>
               ) : (

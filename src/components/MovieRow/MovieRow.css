@@ -47,24 +47,37 @@
   .top10-wrapper {
     display: flex;
     align-items: center;
-    gap: 12px;
   }
   
   .rank-number {
-    font-size: 130px;
-    font-weight: 900;
-    color: white;
-    font-family: 'Arial Black', sans-serif;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    line-height: 1;
+    text-align: right;
+    color: transparent; 
+    -webkit-text-stroke-width: 4px;
+    -webkit-text-stroke-color: var(--transparent-white-30, rgba(255, 255, 255, 0.30));
+    font-family: "Netflix Sans", sans-serif;
+    font-size: 204px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    transform: translateX(35px);
+    z-index: 1;
   }
   
+  
+  
   .top10-image {
-    width: 109px;
-    height: 154px;
+    flex-shrink: 0;
     border-radius: 4px;
     object-fit: cover;
     transition: transform 0.3s ease;
+    z-index: 2;
+  }
+  .top10-image.top{
+    z-index: 2;
+    width: 109px;
+    height: 154px;
+    border-radius: 0px 2px 2px 0px;
+    background: url(<path-to-image>) lightgray 50% / cover no-repeat, #333;
   }
   
   .top10-image:hover {
