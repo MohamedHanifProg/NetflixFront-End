@@ -8,6 +8,7 @@ import Movies from './pages/Movies'
 import Review from './pages/Review';
 import MyList from './pages/MyList';
 import NewAndPopular from './pages/NewAndPopular'; 
+import Browse from './pages/Browse';
 
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
       <Route path="/movies" element={<Movies />} />
       <Route path="/review" element={<Review />} />
       <Route path="/mylist" element={<MyList />} />
-      <Route path="/new-popular" element={<NewAndPopular />} /> 
+      <Route path="/new-popular" element={<NewAndPopular />} />
+      <Route path="/browse" element={<Browse />} /> 
     </Routes>
   );
 }
