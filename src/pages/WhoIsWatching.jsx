@@ -2,13 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/WhoIsWatching.css';
 import AppLayout from '../Layouts/App/AppLayout';
-import API_URL from '../config';
+import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 
-// Reference your icons (these paths expect that your assets folder is in the public folder)
 const plusIcon = "/assets/PlusIcon.png";
-const deleteIcon = "/assets/DeleteIcon.png";  // Ensure this file exists
+const deleteIcon = "/assets/DeleteIcon.png"; 
 
-// Available avatars for new profiles
 const availableAvatars = [
   "/assets/avatar1.png",
   "/assets/avatar2.png",
@@ -19,8 +18,8 @@ const WhoIsWatching = () => {
   const [profiles, setProfiles] = useState([]);
   const [editingProfileId, setEditingProfileId] = useState(null);
   const [editingProfileName, setEditingProfileName] = useState('');
+  const navigate = useNavigate();
 
-  // Fetch profiles from the backend when the component mounts
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
@@ -43,7 +42,11 @@ const WhoIsWatching = () => {
     fetchProfiles();
   }, []);
 
-  // Updates a profile name via PUT request
+  const handleProfileSelect = (profile, e) => {
+    e.stopPropagation();
+    localStorage.setItem("selectedProfile", JSON.stringify(profile));
+    navigate('/home');
+  };
   const updateProfileName = async (profileId, newName) => {
     try {
       const response = await fetch(`${API_URL}/api/users/profiles/${profileId}`, {
@@ -69,8 +72,8 @@ const WhoIsWatching = () => {
     }
   };
 
-  // Inline edit handlers
-  const handleNameClick = (profile) => {
+  const handleNameClick = (profile, e) => {
+    e.stopPropagation();
     setEditingProfileId(profile._id);
     setEditingProfileName(profile.profileName);
   };
@@ -95,8 +98,8 @@ const WhoIsWatching = () => {
     }
   };
 
-  // Handler for deleting a profile
-  const handleDeleteProfile = async (profileId) => {
+  const handleDeleteProfile = async (profileId, e) => {
+    e.stopPropagation();
     if (window.confirm("Are you sure you want to delete this profile?")) {
       try {
         const response = await fetch(`${API_URL}/api/users/profiles/${profileId}`, {
@@ -108,7 +111,6 @@ const WhoIsWatching = () => {
         });
         const data = await response.json();
         if (response.ok) {
-          // Remove the deleted profile from the state
           setProfiles(prevProfiles => prevProfiles.filter(p => p._id !== profileId));
         } else {
           console.error(data.message);
@@ -119,12 +121,11 @@ const WhoIsWatching = () => {
     }
   };
 
-  // Handler for adding a new profile
+
   const handleAddProfile = async () => {
     const profileName = window.prompt("Enter a name for your new profile:");
     if (!profileName || profileName.trim() === "") return;
 
-    // Choose a random avatar for the new profile
     const randomAvatar = availableAvatars[Math.floor(Math.random() * availableAvatars.length)];
 
     try {
@@ -153,11 +154,15 @@ const WhoIsWatching = () => {
         <h1 className="page-title">Who’s watching?</h1>
         <div className="profiles-container">
           {profiles.map((profile) => (
-            <div className="profile-box" key={profile._id} style={{ position: 'relative' }}>
-              {/* Delete button overlay */}
+            <div
+              className="profile-box"
+              key={profile._id}
+              style={{ position: 'relative' }}
+              onClick={(e) => handleProfileSelect(profile, e)}
+            >
               <button
                 className="delete-button"
-                onClick={() => handleDeleteProfile(profile._id)}
+                onClick={(e) => handleDeleteProfile(profile._id, e)}
               >
                 <img src={deleteIcon} alt="Delete Profile" />
               </button>
@@ -176,7 +181,7 @@ const WhoIsWatching = () => {
                   autoFocus
                 />
               ) : (
-                <p className="profile-name" onClick={() => handleNameClick(profile)}>
+                <p className="profile-name" onClick={(e) => handleNameClick(profile, e)}>
                   {profile.profileName}
                 </p>
               )}

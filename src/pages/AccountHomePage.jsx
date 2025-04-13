@@ -15,9 +15,17 @@ const BASE = 'https://api.themoviedb.org/3';
 const AccountHomePage = () => {
   const [rows, setRows] = useState({});
   const [coverMovie, setCoverMovie] = useState(null);
-  
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+
+  ///////////////////////////////////////////////////////// to use later///////////////////////////////////////////////////////////////////
+  // const [selectedProfile, setSelectedProfile] = useState(null);
+  // useEffect(() => {
+  //   const storedProfile = localStorage.getItem("selectedProfile");
+  //   if (storedProfile) {
+  //     setSelectedProfile(JSON.parse(storedProfile));
+  //   }
+  // }, []);
 
   // Reusable fetcher for movie rows
   const fetchRow = async (key, url, limit = 20) => {
