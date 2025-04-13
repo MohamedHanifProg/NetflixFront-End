@@ -77,7 +77,7 @@
     width: 109px;
     height: 154px;
     border-radius: 0px 2px 2px 0px;
-    background: url(<path-to-image>) lightgray 50% / cover no-repeat, #333;
+    /* background: url(<path-to-image>) lightgray 50% / cover no-repeat, #333; */
   }
   
   .top10-image:hover {

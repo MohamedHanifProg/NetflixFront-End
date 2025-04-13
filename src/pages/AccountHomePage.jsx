@@ -8,7 +8,8 @@ import MovieRow from '../components/MovieRow/MovieRow';
 import MovieDetailsModal from '../components/DetailsModal/MovieDetailsModal';
 import '../styles/AccountHomePage.css';
 
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY
+;
 const BASE = 'https://api.themoviedb.org/3';
 
 const AccountHomePage = () => {

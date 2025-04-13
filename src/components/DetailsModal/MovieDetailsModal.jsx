@@ -17,7 +17,9 @@ const playIcon = "/assets/playIcon.png";
 
 
 const BASE = 'https://api.themoviedb.org/3';
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY
+
+;
 
 function MovieDetailsModal({ isOpen, onClose, movie }) {
   const [movieDetails, setMovieDetails] = useState(null);

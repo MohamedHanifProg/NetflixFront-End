@@ -5,7 +5,8 @@ import Menu from '../components/Menu/Menu';
 import AccountFooter from '../components/Footer/AccountFooter';
 import '../styles/ExplorePage.css';
 
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY
+;
 const BASE = 'https://api.themoviedb.org/3';
 
 const NewAndPopular = () => {
