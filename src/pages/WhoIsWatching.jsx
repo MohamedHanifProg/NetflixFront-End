@@ -2,12 +2,21 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/WhoIsWatching.css';
 import AppLayout from '../Layouts/App/AppLayout';
-const plusIcon = "/assets/PlusIcon.png";
 import API_URL from '../config';
+
+// Reference your icons (these paths expect that your assets folder is in the public folder)
+const plusIcon = "/assets/PlusIcon.png";
+const deleteIcon = "/assets/DeleteIcon.png";  // Ensure this file exists
+
+// Available avatars for new profiles
+const availableAvatars = [
+  "/assets/avatar1.png",
+  "/assets/avatar2.png",
+  "/assets/avatar3.png",
+];
 
 const WhoIsWatching = () => {
   const [profiles, setProfiles] = useState([]);
-  // Hold the profile id being edited (if any) and its current edit value
   const [editingProfileId, setEditingProfileId] = useState(null);
   const [editingProfileName, setEditingProfileName] = useState('');
 
@@ -34,7 +43,7 @@ const WhoIsWatching = () => {
     fetchProfiles();
   }, []);
 
-  // Sends an update request to the backend to update the profile name
+  // Updates a profile name via PUT request
   const updateProfileName = async (profileId, newName) => {
     try {
       const response = await fetch(`${API_URL}/api/users/profiles/${profileId}`, {
@@ -47,7 +56,6 @@ const WhoIsWatching = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        // Update the profiles state with the new profileName
         setProfiles((prevProfiles) =>
           prevProfiles.map((p) =>
             p._id === profileId ? { ...p, profileName: newName } : p
@@ -61,18 +69,16 @@ const WhoIsWatching = () => {
     }
   };
 
-  // When a profile name is clicked, begin inline editing
+  // Inline edit handlers
   const handleNameClick = (profile) => {
     setEditingProfileId(profile._id);
     setEditingProfileName(profile.profileName);
   };
 
-  // Handle changes in the inline edit input field
   const handleNameChange = (e) => {
     setEditingProfileName(e.target.value);
   };
 
-  // When the input loses focus, save the update
   const handleNameBlur = async () => {
     if (editingProfileId && editingProfileName) {
       await updateProfileName(editingProfileId, editingProfileName);
@@ -81,7 +87,6 @@ const WhoIsWatching = () => {
     setEditingProfileName('');
   };
 
-  // Also handle "Enter" key to confirm editing
   const handleNameKeyDown = async (e) => {
     if (e.key === 'Enter') {
       await updateProfileName(editingProfileId, editingProfileName);
@@ -90,10 +95,56 @@ const WhoIsWatching = () => {
     }
   };
 
-  // Handler for adding a new profile (to be implemented)
-  const handleAddProfile = () => {
-    console.log('Add profile clicked');
-    // You can implement a modal or separate flow to add a new profile
+  // Handler for deleting a profile
+  const handleDeleteProfile = async (profileId) => {
+    if (window.confirm("Are you sure you want to delete this profile?")) {
+      try {
+        const response = await fetch(`${API_URL}/api/users/profiles/${profileId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          // Remove the deleted profile from the state
+          setProfiles(prevProfiles => prevProfiles.filter(p => p._id !== profileId));
+        } else {
+          console.error(data.message);
+        }
+      } catch (error) {
+        console.error("Error deleting profile", error);
+      }
+    }
+  };
+
+  // Handler for adding a new profile
+  const handleAddProfile = async () => {
+    const profileName = window.prompt("Enter a name for your new profile:");
+    if (!profileName || profileName.trim() === "") return;
+
+    // Choose a random avatar for the new profile
+    const randomAvatar = availableAvatars[Math.floor(Math.random() * availableAvatars.length)];
+
+    try {
+      const response = await fetch(`${API_URL}/api/users/profiles`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ profileName, avatar: randomAvatar }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setProfiles(prev => [...prev, data.profile]);
+      } else {
+        console.error(data.message);
+      }
+    } catch (error) {
+      console.error("Error adding profile", error);
+    }
   };
 
   return (
@@ -102,7 +153,14 @@ const WhoIsWatching = () => {
         <h1 className="page-title">Who’s watching?</h1>
         <div className="profiles-container">
           {profiles.map((profile) => (
-            <div className="profile-box" key={profile._id}>
+            <div className="profile-box" key={profile._id} style={{ position: 'relative' }}>
+              {/* Delete button overlay */}
+              <button
+                className="delete-button"
+                onClick={() => handleDeleteProfile(profile._id)}
+              >
+                <img src={deleteIcon} alt="Delete Profile" />
+              </button>
               <img
                 src={profile.avatar}
                 alt={profile.profileName}

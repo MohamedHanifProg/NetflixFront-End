@@ -60,6 +60,29 @@
     border-radius: 4px;
     cursor: pointer;
   }
+
+  /* Ensure profile-box is relatively positioned */
+.profile-box {
+  position: relative;
+  /* other styles… */
+}
+
+/* Style for the delete button */
+.delete-button {
+  position: absolute;
+  top: 5px;
+  right: 5px; /* Now on the right side of the avatar */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* Style for the image inside the delete button */
+.delete-button img {
+  width: 20px;
+  height: 20px;
+}
+
   
   .add-placeholder {
     width: 144px;
