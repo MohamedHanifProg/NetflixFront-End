@@ -4,10 +4,9 @@ import AppLayout from '../Layouts/App/AppLayout';
 import Menu from '../components/Menu/Menu';
 import AccountFooter from '../components/Footer/AccountFooter';
 import '../styles/ExplorePage.css';
+import API_BASE_URL from '../config'; // ✅ Use your backend's base URL
 
-const API_KEY = process.env.REACT_APP_TMDB_API_KEY
-;
-const BASE = 'https://api.themoviedb.org/3';
+const BASE = `${API_BASE_URL}/homepage`; // ✅ Backend proxy route
 
 const NewAndPopular = () => {
   const [items, setItems] = useState([]);
@@ -18,15 +17,25 @@ const NewAndPopular = () => {
   const fetchData = async () => {
     if (!hasMore) return;
     try {
-      const res = await axios.get(`${BASE}/trending/all/week?api_key=${API_KEY}&page=${page}`);
+      const res = await axios.get(`${BASE}/proxy`, {
+        params: {
+          url: `/trending/all/week?page=${page}`
+        }
+      });
+
       if (res.data.results.length > 0) {
-        setItems(prev => [...prev, ...res.data.results]);
+        const tagged = res.data.results.map(item => ({
+          ...item,
+          media_type: item.media_type || 'movie' // fallback in case it's missing
+        }));
+
+        setItems(prev => [...prev, ...tagged]);
         setPage(prev => prev + 1);
       } else {
         setHasMore(false);
       }
     } catch (err) {
-      console.error("Failed to fetch new & popular items:", err);
+      console.error('Failed to fetch new & popular items:', err);
     }
   };
 

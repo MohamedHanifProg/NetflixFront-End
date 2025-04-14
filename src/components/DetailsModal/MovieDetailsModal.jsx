@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './MovieDetailsModal.css';
+import API_BASE_URL from '../../config'; // ✅ Use backend base URL
 
 // Static assets as constants
 const closeIcon = "/assets/exiticon.png";
@@ -15,15 +16,13 @@ const labelIcon = "/assets/Label.png";
 const netflixNIcon = "/assets/NetflixSmall.png";
 const playIcon = "/assets/playIcon.png";
 
-const BASE = 'https://api.themoviedb.org/3';
-const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+const BASE = `${API_BASE_URL}/homepage`; // ✅ backend route
 
 function MovieDetailsModal({ isOpen, onClose, movie }) {
   const [movieDetails, setMovieDetails] = useState(null);
   const [episodes, setEpisodes] = useState(null);
   const navigate = useNavigate();
 
-  // Navigate to Review page
   const handleReviewClick = () => {
     navigate('/review', { state: { movie } });
   };
@@ -32,30 +31,39 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
     if (movie) {
       const fetchDetails = async () => {
         try {
-          // במקום להסתמך על name/title, תסתמך על movie.media_type
           const isTV = movie.media_type === 'tv';
-          const endpoint = `${BASE}/${isTV ? 'tv' : 'movie'}/${movie.id}?api_key=${API_KEY}&append_to_response=credits`;
-          const res = await axios.get(endpoint);
+          const url = `/${isTV ? 'tv' : 'movie'}/${movie.id}?append_to_response=credits`;
+
+          const res = await axios.get(`${BASE}/proxy`, {
+            params: { url }
+          });
+
           setMovieDetails(res.data);
         } catch (err) {
-          console.error('Failed to fetch details:', err);
+          console.error('Failed to fetch movie details:', err);
         }
       };
+
       fetchDetails();
     }
   }, [movie]);
 
   useEffect(() => {
-    if (movie && movie.media_type === 'tv') {
+    if (movie?.media_type === 'tv') {
       const fetchEpisodes = async () => {
         try {
-          const endpoint = `${BASE}/tv/${movie.id}/season/1?api_key=${API_KEY}`;
-          const res = await axios.get(endpoint);
+          const url = `/tv/${movie.id}/season/1`;
+
+          const res = await axios.get(`${BASE}/proxy`, {
+            params: { url }
+          });
+
           setEpisodes(res.data.episodes);
         } catch (err) {
           console.error('Failed to fetch episodes:', err);
         }
       };
+
       fetchEpisodes();
     }
   }, [movie]);
@@ -97,11 +105,9 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
 
           <div className="buttons-row">
             <div className="left-buttons">
-              {/* REVIEW BUTTON */}
               <button className="review-btn" onClick={handleReviewClick}>
                 <img src={reviewButton} alt="Review" />
               </button>
-
               <button className="plus-btn">
                 <img src={plusButtonIcon} alt="Add to List" />
               </button>
@@ -133,17 +139,18 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
               <p className="info-description">{movieDetails.overview}</p>
             </div>
           </div>
+
           <div className="movie-info-right">
             <div className="info-row">
               <span className="info-gray">Cast:</span>
               <span className="info-white">
-                {movieDetails.credits?.cast?.slice(0, 3).map((c) => c.name).join(', ') || 'N/A'}
+                {movieDetails.credits?.cast?.slice(0, 3).map(c => c.name).join(', ') || 'N/A'}
               </span>
             </div>
             <div className="info-row">
               <span className="info-gray">Genre:</span>
               <span className="info-white">
-                {movieDetails.genres?.map((g) => g.name).join(', ') || 'N/A'}
+                {movieDetails.genres?.map(g => g.name).join(', ') || 'N/A'}
               </span>
             </div>
             <div className="info-row">
@@ -153,8 +160,8 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
           </div>
         </div>
 
-        {/* EPISODES (TV only) */}
-        {isTV && episodes && episodes.length > 0 && (
+        {/* EPISODES */}
+        {isTV && episodes?.length > 0 && (
           <div className="episodes-section">
             <div className="episodes-header">
               <span className="episodes-header-left">Episodes</span>

@@ -1,5 +1,3 @@
-
-// ✅ TvShows.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AppLayout from '../Layouts/App/AppLayout';
@@ -8,10 +6,9 @@ import AccountFooter from '../components/Footer/AccountFooter';
 import MovieRow from '../components/MovieRow/MovieRow';
 import MovieDetailsModal from '../components/DetailsModal/MovieDetailsModal';
 import '../styles/AccountHomePage.css';
+import API_BASE_URL from '../config'; // ✅ use backend base URL
 
-const API_KEY = process.env.REACT_APP_TMDB_API_KEY
-;
-const BASE = 'https://api.themoviedb.org/3';
+const BASE = `${API_BASE_URL}/homepage`; // ✅ point to proxy route
 
 const TvShows = () => {
   const [rows, setRows] = useState({});
@@ -19,11 +16,14 @@ const TvShows = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const fetchRow = async (key, url, limit = 20) => {
+  const fetchRow = async (key, tmdbUrl, limit = 20) => {
     try {
-      const res = await axios.get(`${BASE}${url}&api_key=${API_KEY}`);
+      const res = await axios.get(`${BASE}/proxy`, {
+        params: { url: tmdbUrl }
+      });
       const limited = res.data.results.slice(0, limit);
-      setRows((prev) => ({ ...prev, [key]: limited }));
+      const tagged = limited.map(item => ({ ...item, media_type: 'tv' }));
+      setRows((prev) => ({ ...prev, [key]: tagged }));
     } catch (err) {
       console.error(`Failed to load ${key}:`, err);
     }
@@ -31,10 +31,12 @@ const TvShows = () => {
 
   const fetchCover = async () => {
     try {
-      const res = await axios.get(`${BASE}/discover/tv?sort_by=popularity.desc&api_key=${API_KEY}`);
+      const res = await axios.get(`${BASE}/proxy`, {
+        params: { url: '/discover/tv?sort_by=popularity.desc' }
+      });
       const picks = res.data.results.slice(0, 4);
       const random = picks[Math.floor(Math.random() * picks.length)];
-      setCoverShow(random);
+      setCoverShow({ ...random, media_type: 'tv' });
     } catch (err) {
       console.error('Failed to fetch cover show:', err);
     }

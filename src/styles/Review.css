@@ -49,4 +49,22 @@
     border-radius: 4px;
     cursor: pointer;
   }
+  .review-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .review-buttons button.cancel-btn {
+    background-color: #777;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .review-buttons button.cancel-btn:hover {
+    background-color: #555;
+  }
   

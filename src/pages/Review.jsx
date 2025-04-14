@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import AppLayout from '../Layouts/App/AppLayout';
 import '../styles/Review.css';
 
 const Review = () => {
   const { state } = useLocation();
+  const navigate = useNavigate(); // ✅ Hook to handle navigation
   const movie = state?.movie;
 
   const [text, setText] = useState('');
@@ -22,6 +23,13 @@ const Review = () => {
     };
     console.log('Submitted review:', reviewData);
     alert('Review submitted!');
+    // Optionally redirect after submit
+    navigate(-1);
+  };
+
+  const handleCancel = () => {
+    // ✅ Go back to previous page
+    navigate(-1);
   };
 
   return (
@@ -39,6 +47,7 @@ const Review = () => {
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
+
           <div className="review-options">
             <label>
               <input
@@ -74,7 +83,12 @@ const Review = () => {
             ))}
           </div>
 
-          <button type="submit">Submit Review</button>
+          <div className="review-buttons">
+            <button type="submit">Submit Review</button>
+            <button type="button" className="cancel-btn" onClick={handleCancel}>
+              Cancel
+            </button>
+          </div>
         </form>
       </div>
     </AppLayout>

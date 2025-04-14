@@ -6,10 +6,9 @@ import AccountFooter from '../components/Footer/AccountFooter';
 import MovieRow from '../components/MovieRow/MovieRow';
 import MovieDetailsModal from '../components/DetailsModal/MovieDetailsModal';
 import '../styles/AccountHomePage.css';
+import API_URL from '../config';
+const BASE = `${API_URL}/homepage`;
 
-const API_KEY = process.env.REACT_APP_TMDB_API_KEY
-;
-const BASE = 'https://api.themoviedb.org/3';
 
 const Movies = () => {
   const [rows, setRows] = useState({});
@@ -17,11 +16,11 @@ const Movies = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // ✅ FIX: Proper API key injection regardless of query string presence
-  const fetchRow = async (key, url, limit = 20) => {
+  const fetchRow = async (key, tmdbUrl, limit = 20) => {
     try {
-      const connector = url.includes('?') ? '&' : '?';
-      const res = await axios.get(`${BASE}${url}${connector}api_key=${API_KEY}`);
+      const res = await axios.get(`${BASE}/proxy`, {
+        params: { url: tmdbUrl }
+      });
       const limited = res.data.results.slice(0, limit);
       setRows((prev) => ({ ...prev, [key]: limited }));
     } catch (err) {
@@ -31,7 +30,9 @@ const Movies = () => {
 
   const fetchCover = async () => {
     try {
-      const res = await axios.get(`${BASE}/discover/movie?sort_by=popularity.desc&api_key=${API_KEY}`);
+      const res = await axios.get(`${BASE}/proxy`, {
+        params: { url: '/discover/movie?sort_by=popularity.desc' }
+      });
       const picks = res.data.results.slice(0, 4);
       const random = picks[Math.floor(Math.random() * picks.length)];
       setCoverMovie(random);

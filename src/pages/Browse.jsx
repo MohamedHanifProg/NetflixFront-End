@@ -4,17 +4,15 @@ import AppLayout from '../Layouts/App/AppLayout';
 import Menu from '../components/Menu/Menu';
 import AccountFooter from '../components/Footer/AccountFooter';
 import '../styles/Browse.css';
+import API_BASE_URL from '../config'; // ✅ Import backend base URL
 
-const API_KEY = process.env.REACT_APP_TMDB_API_KEY
-;
-const BASE_URL = 'https://api.themoviedb.org/3';
+const BASE = `${API_BASE_URL}/homepage`; // ✅ Using backend proxy
 
 const Browse = () => {
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  // Filter state
   const [genre, setGenre] = useState('');
   const [language, setLanguage] = useState('en');
   const [sortBy, setSortBy] = useState('popularity.desc');
@@ -32,17 +30,11 @@ const Browse = () => {
     if (node) observer.current.observe(node);
   }, [hasMore]);
 
-  // Fetch data from TMDB with current filters
   const fetchItems = async (pageNum, reset = false) => {
     try {
-      const res = await axios.get(`${BASE_URL}/discover/movie`, {
-        params: {
-          api_key: API_KEY,
-          page: pageNum,
-          sort_by: sortBy,
-          with_genres: genre,
-          with_original_language: language,
-        },
+      const tmdbQuery = `/discover/movie?page=${pageNum}&sort_by=${sortBy}&with_genres=${genre}&with_original_language=${language}`;
+      const res = await axios.get(`${BASE}/proxy`, {
+        params: { url: tmdbQuery }
       });
 
       const newItems = res.data.results;
@@ -53,13 +45,11 @@ const Browse = () => {
     }
   };
 
-  // Reload items when filters change
   useEffect(() => {
     setPage(1);
     fetchItems(1, true);
   }, [genre, language, sortBy]);
 
-  // Fetch more on scroll
   useEffect(() => {
     if (page > 1) {
       fetchItems(page);
@@ -69,13 +59,10 @@ const Browse = () => {
   return (
     <AppLayout>
       <Menu />
-
       <main className="browse-container">
-        
-
         {/* Filters */}
         <div className="browse-filters">
-        <h1 className="browse-title">Browse</h1>
+          <h1 className="browse-title">Browse</h1>
           <span className="filter-label">Select Your Preferences</span>
 
           <div className="filter-group">
@@ -126,7 +113,7 @@ const Browse = () => {
           </div>
         </div>
 
-        {/* Grid of Content */}
+        {/* Grid */}
         <div className="browse-grid">
           {items.map((item, idx) => (
             <div
@@ -143,7 +130,6 @@ const Browse = () => {
           ))}
         </div>
       </main>
-
       <AccountFooter />
     </AppLayout>
   );

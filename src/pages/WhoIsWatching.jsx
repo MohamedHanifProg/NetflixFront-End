@@ -3,7 +3,9 @@ import React, { useState, useEffect } from 'react';
 import '../styles/WhoIsWatching.css';
 import AppLayout from '../Layouts/App/AppLayout';
 import { useNavigate } from 'react-router-dom';
-import { API_URL } from '../config';
+import API_URL from '../config';
+
+
 
 const plusIcon = "/assets/PlusIcon.png";
 const deleteIcon = "/assets/DeleteIcon.png"; 

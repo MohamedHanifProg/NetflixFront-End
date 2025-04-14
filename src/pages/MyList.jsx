@@ -1,26 +1,47 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import AppLayout from '../Layouts/App/AppLayout';
 import Menu from '../components/Menu/Menu';
 import AccountFooter from '../components/Footer/AccountFooter';
 import '../styles/ExplorePage.css';
+import API_BASE_URL from '../config'; // ✅ Backend URL for proxy
 
 const MyList = () => {
   const [comingSoon, setComingSoon] = useState([]);
   const [trending, setTrending] = useState([]);
   const [topPicks, setTopPicks] = useState([]);
 
-  // Simulate fetching from localStorage
   useEffect(() => {
     const storedList = JSON.parse(localStorage.getItem('myList')) || [];
 
-    // Dummy categorization based on index
-    const soon = storedList.filter((_, idx) => idx % 3 === 0);
-    const trend = storedList.filter((_, idx) => idx % 3 === 1);
-    const picks = storedList.filter((_, idx) => idx % 3 === 2);
+    const fetchItems = async () => {
+      try {
+        const responses = await Promise.all(
+          storedList.map(item =>
+            axios
+              .get(`${API_BASE_URL}/homepage/proxy`, {
+                params: { url: `/${item.media_type}/${item.id}` }
+              })
+              .then(res => ({ ...res.data, media_type: item.media_type }))
+          )
+        );
 
-    setComingSoon(soon);
-    setTrending(trend);
-    setTopPicks(picks);
+        // Categorize items (just a demo categorization by index)
+        const soon = responses.filter((_, idx) => idx % 3 === 0);
+        const trend = responses.filter((_, idx) => idx % 3 === 1);
+        const picks = responses.filter((_, idx) => idx % 3 === 2);
+
+        setComingSoon(soon);
+        setTrending(trend);
+        setTopPicks(picks);
+      } catch (err) {
+        console.error('Error fetching my list items:', err);
+      }
+    };
+
+    if (storedList.length > 0) {
+      fetchItems();
+    }
   }, []);
 
   const renderSection = (title, items) => (
@@ -58,4 +79,4 @@ const MyList = () => {
   );
 };
 
-export default MyList;
+export default MyList

@@ -7,7 +7,9 @@ import MovieRow from '../components/MovieRow/MovieRow';
 import MovieDetailsModal from '../components/DetailsModal/MovieDetailsModal';
 import '../styles/AccountHomePage.css';
 
-const BASE = 'http://localhost:5000/api/homepage';
+import API_URL from '../config';
+const BASE = `${API_URL}/homepage`;
+
 
 const AccountHomePage = () => {
   const [rows, setRows] = useState({});
