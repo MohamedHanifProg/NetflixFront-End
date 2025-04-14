@@ -15,6 +15,15 @@ const AccountHomePage = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
+  ///////////////////////////////////////////////////////// to use later///////////////////////////////////////////////////////////////////
+  // const [selectedProfile, setSelectedProfile] = useState(null);
+  // useEffect(() => {
+  //   const storedProfile = localStorage.getItem("selectedProfile");
+  //   if (storedProfile) {
+  //     setSelectedProfile(JSON.parse(storedProfile));
+  //   }
+  // }, []);
+
   // Fetch a row from TMDB (via your backend proxy),
   // then add media_type = 'movie' or 'tv' to each item
   const fetchRow = async (key, tmdbUrl, limit = 20) => {

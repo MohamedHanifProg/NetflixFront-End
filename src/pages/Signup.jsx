@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import '../styles/Signup.css';
 import AuthLayout from '../Layouts/Auth/AuthLayout';
 import { useNavigate } from 'react-router-dom';
-import API_URL from '../config';
+import { API_URL } from '../config';
+
 
 
 function Signup() {
