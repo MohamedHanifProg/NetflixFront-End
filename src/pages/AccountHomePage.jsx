@@ -15,17 +15,6 @@ const AccountHomePage = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  ///////////////////////////////////////////////////////// to use later///////////////////////////////////////////////////////////////////
-  // const [selectedProfile, setSelectedProfile] = useState(null);
-  // useEffect(() => {
-  //   const storedProfile = localStorage.getItem("selectedProfile");
-  //   if (storedProfile) {
-  //     setSelectedProfile(JSON.parse(storedProfile));
-  //   }
-  // }, []);
-
-  // Fetch a row from TMDB (via your backend proxy),
-  // then add media_type = 'movie' or 'tv' to each item
   const fetchRow = async (key, tmdbUrl, limit = 20) => {
     try {
       const res = await axios.get(`${BASE}/proxy`, {
@@ -33,7 +22,6 @@ const AccountHomePage = () => {
       });
       let results = res.data.results || [];
 
-      // אם ב-URL יש "/tv", נסמן כ-s 'tv', אחרת 'movie'
       const isTV = tmdbUrl.includes('/tv');
       results = results.map(item => ({
         ...item,
@@ -47,7 +35,6 @@ const AccountHomePage = () => {
     }
   };
 
-  // Fetch a random popular movie or TV show as the cover
   const fetchCover = async () => {
     try {
       const [moviesRes, tvRes] = await Promise.all([
@@ -59,7 +46,6 @@ const AccountHomePage = () => {
         })
       ]);
 
-      // Mark them explicitly as movie/tv
       const movies = moviesRes.data.results.map(m => ({ ...m, media_type: 'movie' }));
       const tvShows = tvRes.data.results.map(t => ({ ...t, media_type: 'tv' }));
 
@@ -102,7 +88,6 @@ const AccountHomePage = () => {
     <AppLayout>
       <Menu />
       <main className="homepage-container">
-        {/* Cover Section */}
         <section
           className="cover-section"
           style={{
@@ -135,7 +120,6 @@ const AccountHomePage = () => {
           </div>
         </section>
 
-        {/* Movie Rows */}
         <MovieRow title="Matched for You" movies={rows.matched} onMoreInfo={handleMoreInfo} />
         <MovieRow title="Now on Netflix" movies={rows.netflix} onMoreInfo={handleMoreInfo} />
         <MovieRow title="Top 10 movies in the U.S. Today" movies={rows.top10} showRanking={true} onMoreInfo={handleMoreInfo} />

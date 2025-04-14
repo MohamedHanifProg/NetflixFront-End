@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './MovieDetailsModal.css';
 
-// Static assets as constants (assuming these files exist in public/assets)
+// Static assets as constants
 const closeIcon = "/assets/exiticon.png";
 const plusButtonIcon = "/assets/PlusButton.png";
 const muteButtonIcon = "/assets/MuteButton.png";
@@ -15,18 +15,15 @@ const labelIcon = "/assets/Label.png";
 const netflixNIcon = "/assets/NetflixSmall.png";
 const playIcon = "/assets/playIcon.png";
 
-
 const BASE = 'https://api.themoviedb.org/3';
-const API_KEY = process.env.REACT_APP_TMDB_API_KEY
-
-;
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 function MovieDetailsModal({ isOpen, onClose, movie }) {
   const [movieDetails, setMovieDetails] = useState(null);
   const [episodes, setEpisodes] = useState(null);
   const navigate = useNavigate();
 
-  // ✅ Navigate to Review page
+  // Navigate to Review page
   const handleReviewClick = () => {
     navigate('/review', { state: { movie } });
   };
@@ -35,7 +32,8 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
     if (movie) {
       const fetchDetails = async () => {
         try {
-          const isTV = movie?.name && !movie?.title;
+          // במקום להסתמך על name/title, תסתמך על movie.media_type
+          const isTV = movie.media_type === 'tv';
           const endpoint = `${BASE}/${isTV ? 'tv' : 'movie'}/${movie.id}?api_key=${API_KEY}&append_to_response=credits`;
           const res = await axios.get(endpoint);
           setMovieDetails(res.data);
@@ -48,8 +46,7 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
   }, [movie]);
 
   useEffect(() => {
-    const isTV = movie?.name && !movie?.title;
-    if (isTV && movie) {
+    if (movie && movie.media_type === 'tv') {
       const fetchEpisodes = async () => {
         try {
           const endpoint = `${BASE}/tv/${movie.id}/season/1?api_key=${API_KEY}`;
@@ -65,7 +62,7 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
 
   if (!isOpen || !movieDetails) return null;
 
-  const isTV = movie?.name && !movie?.title;
+  const isTV = movie.media_type === 'tv';
   const title = movieDetails.title || movieDetails.name;
   const releaseYear = (movieDetails.release_date || movieDetails.first_air_date || '').slice(0, 4);
   const runtime = isTV
@@ -100,7 +97,7 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
 
           <div className="buttons-row">
             <div className="left-buttons">
-              {/* ✅ REVIEW BUTTON */}
+              {/* REVIEW BUTTON */}
               <button className="review-btn" onClick={handleReviewClick}>
                 <img src={reviewButton} alt="Review" />
               </button>
