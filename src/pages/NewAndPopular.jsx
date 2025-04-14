@@ -4,9 +4,10 @@ import AppLayout from '../Layouts/App/AppLayout';
 import Menu from '../components/Menu/Menu';
 import AccountFooter from '../components/Footer/AccountFooter';
 import '../styles/ExplorePage.css';
-import API_BASE_URL from '../config'; // ✅ Use your backend's base URL
+import API_BASE_URL from '../config';
 
-const BASE = `${API_BASE_URL}/homepage`; // ✅ Backend proxy route
+const BASE = `${API_BASE_URL}/trending`; // ✅ matches backend
+
 
 const NewAndPopular = () => {
   const [items, setItems] = useState([]);
@@ -17,27 +18,29 @@ const NewAndPopular = () => {
   const fetchData = async () => {
     if (!hasMore) return;
     try {
-      const res = await axios.get(`${BASE}/proxy`, {
-        params: {
-          url: `/trending/all/week?page=${page}`
-        }
+      const res = await axios.get(`${BASE}?page=${page}`);
+      const newItems = res.data.map(item => ({
+        ...item,
+        media_type: item.media_type || 'movie'
+      }));
+  
+      // Deduplicate by unique key
+      setItems(prev => {
+        const existingKeys = new Set(prev.map(i => `${i.media_type}-${i.id}`));
+        const filtered = newItems.filter(i => !existingKeys.has(`${i.media_type}-${i.id}`));
+        return [...prev, ...filtered];
       });
-
-      if (res.data.results.length > 0) {
-        const tagged = res.data.results.map(item => ({
-          ...item,
-          media_type: item.media_type || 'movie' // fallback in case it's missing
-        }));
-
-        setItems(prev => [...prev, ...tagged]);
-        setPage(prev => prev + 1);
-      } else {
+  
+      if (res.data.length === 0) {
         setHasMore(false);
+      } else {
+        setPage(prev => prev + 1);
       }
     } catch (err) {
       console.error('Failed to fetch new & popular items:', err);
     }
   };
+  
 
   useEffect(() => {
     fetchData();

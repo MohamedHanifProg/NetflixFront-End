@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './MovieDetailsModal.css';
-import API_BASE_URL from '../../config'; // ✅ Use backend base URL
+import API_BASE_URL from '../../config';
 
-// Static assets as constants
+// Static assets
 const closeIcon = "/assets/exiticon.png";
 const plusButtonIcon = "/assets/PlusButton.png";
 const muteButtonIcon = "/assets/MuteButton.png";
@@ -16,62 +16,54 @@ const labelIcon = "/assets/Label.png";
 const netflixNIcon = "/assets/NetflixSmall.png";
 const playIcon = "/assets/playIcon.png";
 
-const BASE = `${API_BASE_URL}/homepage`; // ✅ backend route
+// RESTful base route
+const BASE = `${API_BASE_URL}/details`;
 
 function MovieDetailsModal({ isOpen, onClose, movie }) {
   const [movieDetails, setMovieDetails] = useState(null);
   const [episodes, setEpisodes] = useState(null);
   const navigate = useNavigate();
 
+  const isTV = movie?.media_type === 'tv';
+  const title = movie?.title || movie?.name;
+
   const handleReviewClick = () => {
     navigate('/review', { state: { movie } });
   };
 
   useEffect(() => {
-    if (movie) {
-      const fetchDetails = async () => {
-        try {
-          const isTV = movie.media_type === 'tv';
-          const url = `/${isTV ? 'tv' : 'movie'}/${movie.id}?append_to_response=credits`;
+    if (!movie) return;
 
-          const res = await axios.get(`${BASE}/proxy`, {
-            params: { url }
-          });
+    const fetchDetails = async () => {
+      try {
+        const endpoint = `${BASE}/${movie.media_type}/${movie.id}`;
+        const res = await axios.get(endpoint);
+        setMovieDetails(res.data);
+      } catch (err) {
+        console.error('Failed to fetch movie details:', err);
+      }
+    };
 
-          setMovieDetails(res.data);
-        } catch (err) {
-          console.error('Failed to fetch movie details:', err);
-        }
-      };
-
-      fetchDetails();
-    }
+    fetchDetails();
   }, [movie]);
 
   useEffect(() => {
-    if (movie?.media_type === 'tv') {
-      const fetchEpisodes = async () => {
-        try {
-          const url = `/tv/${movie.id}/season/1`;
+    if (!isTV || !movie?.id) return;
 
-          const res = await axios.get(`${BASE}/proxy`, {
-            params: { url }
-          });
+    const fetchEpisodes = async () => {
+      try {
+        const res = await axios.get(`${BASE}/tv/${movie.id}/season/1`);
+        setEpisodes(res.data.episodes);
+      } catch (err) {
+        console.error('Failed to fetch episodes:', err);
+      }
+    };
 
-          setEpisodes(res.data.episodes);
-        } catch (err) {
-          console.error('Failed to fetch episodes:', err);
-        }
-      };
-
-      fetchEpisodes();
-    }
+    fetchEpisodes();
   }, [movie]);
 
   if (!isOpen || !movieDetails) return null;
 
-  const isTV = movie.media_type === 'tv';
-  const title = movieDetails.title || movieDetails.name;
   const releaseYear = (movieDetails.release_date || movieDetails.first_air_date || '').slice(0, 4);
   const runtime = isTV
     ? `${movieDetails.number_of_seasons} season${movieDetails.number_of_seasons > 1 ? 's' : ''}`
@@ -80,7 +72,6 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        {/* HERO SECTION */}
         <div className="modal-hero">
           <img
             src={
@@ -118,7 +109,6 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
           </div>
         </div>
 
-        {/* MOVIE INFO SECTION */}
         <div className="movie-info-section">
           <div className="movie-info-left">
             <div className="info-line line-1">
@@ -160,7 +150,6 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
           </div>
         </div>
 
-        {/* EPISODES */}
         {isTV && episodes?.length > 0 && (
           <div className="episodes-section">
             <div className="episodes-header">

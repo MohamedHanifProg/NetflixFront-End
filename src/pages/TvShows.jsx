@@ -6,9 +6,9 @@ import AccountFooter from '../components/Footer/AccountFooter';
 import MovieRow from '../components/MovieRow/MovieRow';
 import MovieDetailsModal from '../components/DetailsModal/MovieDetailsModal';
 import '../styles/AccountHomePage.css';
-import API_BASE_URL from '../config'; // ✅ use backend base URL
+import API_BASE_URL from '../config';
 
-const BASE = `${API_BASE_URL}/homepage`; // ✅ point to proxy route
+const BASE = `${API_BASE_URL}/tvshows`;
 
 const TvShows = () => {
   const [rows, setRows] = useState({});
@@ -16,14 +16,11 @@ const TvShows = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const fetchRow = async (key, tmdbUrl, limit = 20) => {
+  const fetchRow = async (key, endpoint) => {
     try {
-      const res = await axios.get(`${BASE}/proxy`, {
-        params: { url: tmdbUrl }
-      });
-      const limited = res.data.results.slice(0, limit);
-      const tagged = limited.map(item => ({ ...item, media_type: 'tv' }));
-      setRows((prev) => ({ ...prev, [key]: tagged }));
+      const res = await axios.get(`${BASE}/${endpoint}`);
+      const results = res.data.results || res.data || [];
+      setRows(prev => ({ ...prev, [key]: results }));
     } catch (err) {
       console.error(`Failed to load ${key}:`, err);
     }
@@ -31,12 +28,8 @@ const TvShows = () => {
 
   const fetchCover = async () => {
     try {
-      const res = await axios.get(`${BASE}/proxy`, {
-        params: { url: '/discover/tv?sort_by=popularity.desc' }
-      });
-      const picks = res.data.results.slice(0, 4);
-      const random = picks[Math.floor(Math.random() * picks.length)];
-      setCoverShow({ ...random, media_type: 'tv' });
+      const res = await axios.get(`${BASE}/cover`);
+      setCoverShow(res.data);
     } catch (err) {
       console.error('Failed to fetch cover show:', err);
     }
@@ -49,11 +42,11 @@ const TvShows = () => {
 
   useEffect(() => {
     fetchCover();
-    fetchRow('matched', '/discover/tv?sort_by=popularity.desc', 10);
-    fetchRow('netflix', '/discover/tv?with_networks=213', 10);
-    fetchRow('top10', '/tv/top_rated?region=US', 10);
-    fetchRow('animation', '/discover/tv?with_genres=16');
-    fetchRow('adultAnimation', '/discover/tv?with_genres=16&include_adult=true');
+    fetchRow('matched', 'matched'); // 10 items
+    fetchRow('netflix', 'netflix'); // 10 items
+    fetchRow('top10', 'top10');     // 10 items
+    fetchRow('animation', 'animation'); // all
+    fetchRow('adultAnimation', 'adultAnimation'); // all
   }, []);
 
   return (

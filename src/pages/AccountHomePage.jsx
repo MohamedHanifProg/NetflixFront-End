@@ -10,28 +10,17 @@ import '../styles/AccountHomePage.css';
 import API_URL from '../config';
 const BASE = `${API_URL}/homepage`;
 
-
 const AccountHomePage = () => {
   const [rows, setRows] = useState({});
   const [coverMovie, setCoverMovie] = useState(null);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const fetchRow = async (key, tmdbUrl, limit = 20) => {
+  const fetchRow = async (key, endpoint) => {
     try {
-      const res = await axios.get(`${BASE}/proxy`, {
-        params: { url: tmdbUrl }
-      });
-      let results = res.data.results || [];
-
-      const isTV = tmdbUrl.includes('/tv');
-      results = results.map(item => ({
-        ...item,
-        media_type: isTV ? 'tv' : 'movie'
-      }));
-
-      const limited = results.slice(0, limit);
-      setRows((prev) => ({ ...prev, [key]: limited }));
+      const res = await axios.get(`${BASE}/${endpoint}`);
+      const results = res.data.results || res.data || [];
+      setRows(prev => ({ ...prev, [key]: results }));
     } catch (err) {
       console.error(`Failed to load ${key}:`, err);
     }
@@ -39,21 +28,8 @@ const AccountHomePage = () => {
 
   const fetchCover = async () => {
     try {
-      const [moviesRes, tvRes] = await Promise.all([
-        axios.get(`${BASE}/proxy`, {
-          params: { url: '/discover/movie?sort_by=popularity.desc' }
-        }),
-        axios.get(`${BASE}/proxy`, {
-          params: { url: '/discover/tv?sort_by=popularity.desc' }
-        })
-      ]);
-
-      const movies = moviesRes.data.results.map(m => ({ ...m, media_type: 'movie' }));
-      const tvShows = tvRes.data.results.map(t => ({ ...t, media_type: 'tv' }));
-
-      const combined = [...movies.slice(0, 2), ...tvShows.slice(0, 2)];
-      const random = combined[Math.floor(Math.random() * combined.length)];
-      setCoverMovie(random);
+      const res = await axios.get(`${BASE}/cover`);
+      setCoverMovie(res.data);
     } catch (err) {
       console.error('Failed to fetch cover movie:', err);
     }
@@ -61,17 +37,17 @@ const AccountHomePage = () => {
 
   useEffect(() => {
     fetchCover();
-    fetchRow('matched', '/discover/movie?sort_by=popularity.desc', 10);
-    fetchRow('netflix', '/discover/tv?with_networks=213', 10);
-    fetchRow('top10', '/movie/top_rated?region=US', 10);
-    fetchRow('love', '/discover/movie?sort_by=popularity.desc');
-    fetchRow('animation', '/discover/movie?with_genres=16');
-    fetchRow('inspiring', '/search/movie?query=inspiring');
-    fetchRow('watchlist', '/discover/movie?sort_by=popularity.desc');
-    fetchRow('weekend', '/discover/movie?with_runtime.lte=90');
-    fetchRow('critics', '/movie/top_rated');
-    fetchRow('fresh', '/discover/movie?sort_by=vote_average.desc');
-    fetchRow('adultAnimation', '/discover/tv?with_genres=16&include_adult=true');
+    fetchRow('matched', 'matched'); // 10 items
+    fetchRow('netflix', 'netflix'); // 10 items
+    fetchRow('top10', 'top10');     // 10 items
+    fetchRow('love', 'love');       // all
+    fetchRow('animation', 'animation'); // all
+    fetchRow('inspiring', 'inspiring'); // all
+    fetchRow('watchlist', 'watchlist'); // all
+    fetchRow('weekend', 'weekend');     // all
+    fetchRow('critics', 'critics');     // all
+    fetchRow('fresh', 'fresh');         // all
+    fetchRow('adultAnimation', 'adultAnimation'); // all
   }, []);
 
   useEffect(() => {

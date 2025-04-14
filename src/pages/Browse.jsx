@@ -4,9 +4,9 @@ import AppLayout from '../Layouts/App/AppLayout';
 import Menu from '../components/Menu/Menu';
 import AccountFooter from '../components/Footer/AccountFooter';
 import '../styles/Browse.css';
-import API_BASE_URL from '../config'; // ✅ Import backend base URL
+import API_BASE_URL from '../config';
 
-const BASE = `${API_BASE_URL}/homepage`; // ✅ Using backend proxy
+const BASE = `${API_BASE_URL}/browse`; // ✅ Using RESTful endpoint
 
 const Browse = () => {
   const [items, setItems] = useState([]);
@@ -19,22 +19,29 @@ const Browse = () => {
 
   const observer = useRef();
 
-  const lastItemRef = useCallback((node) => {
-    if (!hasMore) return;
-    if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        setPage((prev) => prev + 1);
-      }
-    });
-    if (node) observer.current.observe(node);
-  }, [hasMore]);
+  const lastItemRef = useCallback(
+    (node) => {
+      if (!hasMore) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          setPage((prev) => prev + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [hasMore]
+  );
 
   const fetchItems = async (pageNum, reset = false) => {
     try {
-      const tmdbQuery = `/discover/movie?page=${pageNum}&sort_by=${sortBy}&with_genres=${genre}&with_original_language=${language}`;
-      const res = await axios.get(`${BASE}/proxy`, {
-        params: { url: tmdbQuery }
+      const res = await axios.get(BASE, {
+        params: {
+          page: pageNum,
+          sort_by: sortBy,
+          with_genres: genre,
+          with_original_language: language
+        }
       });
 
       const newItems = res.data.results;
@@ -47,7 +54,7 @@ const Browse = () => {
 
   useEffect(() => {
     setPage(1);
-    fetchItems(1, true);
+    fetchItems(1, true); // reset items on filter change
   }, [genre, language, sortBy]);
 
   useEffect(() => {
@@ -58,7 +65,7 @@ const Browse = () => {
 
   return (
     <AppLayout>
-      <Menu />
+      <Menu activePage="browse" />
       <main className="browse-container">
         {/* Filters */}
         <div className="browse-filters">
@@ -117,12 +124,12 @@ const Browse = () => {
         <div className="browse-grid">
           {items.map((item, idx) => (
             <div
-              key={item.id}
+              key={`${item.id}-${item.media_type || 'movie'}`}
               ref={idx === items.length - 1 ? lastItemRef : null}
               className="browse-item"
             >
               <img
-                src={`https://image.tmdb.org/t/p/w300${item.poster_path}`}
+                src={`https://image.tmdb.org/t/p/w300${item.poster_path || item.backdrop_path}`}
                 alt={item.title || item.name}
               />
               <p>{item.title || item.name}</p>
