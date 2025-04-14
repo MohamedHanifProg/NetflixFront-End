@@ -36,9 +36,6 @@ function Login() {
       }
 
       console.log('Login successful:', data);
-      // Save the token in localStorage or context if needed
-      localStorage.setItem('token', data.token);
-      // Redirect to the dashboard or WhoIsWatching page
       sessionStorage.setItem('token', data.token);
       navigate('/profiles');
     } catch (err) {
