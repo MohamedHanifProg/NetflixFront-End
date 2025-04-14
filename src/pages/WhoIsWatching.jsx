@@ -25,7 +25,7 @@ const WhoIsWatching = () => {
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/users/profiles`, {
+        const response = await fetch(`${API_URL}/users/profiles`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
@@ -51,7 +51,7 @@ const WhoIsWatching = () => {
   };
   const updateProfileName = async (profileId, newName) => {
     try {
-      const response = await fetch(`${API_URL}/api/users/profiles/${profileId}`, {
+      const response = await fetch(`${API_URL}/users/profiles/${profileId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ const WhoIsWatching = () => {
     e.stopPropagation();
     if (window.confirm("Are you sure you want to delete this profile?")) {
       try {
-        const response = await fetch(`${API_URL}/api/users/profiles/${profileId}`, {
+        const response = await fetch(`${API_URL}/users/profiles/${profileId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ const WhoIsWatching = () => {
     const randomAvatar = availableAvatars[Math.floor(Math.random() * availableAvatars.length)];
 
     try {
-      const response = await fetch(`${API_URL}/api/users/profiles`, {
+      const response = await fetch(`${API_URL}/users/profiles`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
