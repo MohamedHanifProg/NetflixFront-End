@@ -1,4 +1,3 @@
-// src/pages/AccountHomePage.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AppLayout from '../Layouts/App/AppLayout';
@@ -8,37 +7,50 @@ import MovieRow from '../components/MovieRow/MovieRow';
 import MovieDetailsModal from '../components/DetailsModal/MovieDetailsModal';
 import '../styles/AccountHomePage.css';
 
-const API_KEY = process.env.REACT_APP_TMDB_API_KEY
-;
-const BASE = 'https://api.themoviedb.org/3';
+const BASE = 'http://localhost:5000/api/homepage';
 
 const AccountHomePage = () => {
   const [rows, setRows] = useState({});
   const [coverMovie, setCoverMovie] = useState(null);
-  
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  // Reusable fetcher for movie rows
-  const fetchRow = async (key, url, limit = 20) => {
+  // Fetch a row from TMDB (via your backend proxy),
+  // then add media_type = 'movie' or 'tv' to each item
+  const fetchRow = async (key, tmdbUrl, limit = 20) => {
     try {
-      const connector = url.includes('?') ? '&' : '?';
-      const res = await axios.get(`${BASE}${url}${connector}api_key=${API_KEY}`);
-      const limited = res.data.results.slice(0, limit);
+      const res = await axios.get(`${BASE}/proxy`, {
+        params: { url: tmdbUrl }
+      });
+      let results = res.data.results || [];
+
+      // אם ב-URL יש "/tv", נסמן כ-s 'tv', אחרת 'movie'
+      const isTV = tmdbUrl.includes('/tv');
+      results = results.map(item => ({
+        ...item,
+        media_type: isTV ? 'tv' : 'movie'
+      }));
+
+      const limited = results.slice(0, limit);
       setRows((prev) => ({ ...prev, [key]: limited }));
     } catch (err) {
       console.error(`Failed to load ${key}:`, err);
     }
   };
 
-  // Fetch a popular cover movie or TV show
+  // Fetch a random popular movie or TV show as the cover
   const fetchCover = async () => {
     try {
       const [moviesRes, tvRes] = await Promise.all([
-        axios.get(`${BASE}/discover/movie?sort_by=popularity.desc&api_key=${API_KEY}`),
-        axios.get(`${BASE}/discover/tv?sort_by=popularity.desc&api_key=${API_KEY}`)
+        axios.get(`${BASE}/proxy`, {
+          params: { url: '/discover/movie?sort_by=popularity.desc' }
+        }),
+        axios.get(`${BASE}/proxy`, {
+          params: { url: '/discover/tv?sort_by=popularity.desc' }
+        })
       ]);
 
+      // Mark them explicitly as movie/tv
       const movies = moviesRes.data.results.map(m => ({ ...m, media_type: 'movie' }));
       const tvShows = tvRes.data.results.map(t => ({ ...t, media_type: 'tv' }));
 
@@ -66,11 +78,7 @@ const AccountHomePage = () => {
   }, []);
 
   useEffect(() => {
-    if (modalOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = modalOpen ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
     };
@@ -84,7 +92,6 @@ const AccountHomePage = () => {
   return (
     <AppLayout>
       <Menu />
-
       <main className="homepage-container">
         {/* Cover Section */}
         <section
@@ -104,13 +111,8 @@ const AccountHomePage = () => {
               <h1 className="cover-title">
                 {coverMovie?.title || coverMovie?.name}
               </h1>
-              <p className="cover-description">
-                {coverMovie?.overview}
-              </p>
-              <button
-                className="more-info-btn"
-                onClick={() => handleMoreInfo(coverMovie)}
-              >
+              <p className="cover-description">{coverMovie?.overview}</p>
+              <button className="more-info-btn" onClick={() => handleMoreInfo(coverMovie)}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 
                            10-4.48 10-10S17.52 2 12 2zm0 
@@ -137,10 +139,7 @@ const AccountHomePage = () => {
         <MovieRow title="Today's Fresh Picks for You" movies={rows.fresh} onMoreInfo={handleMoreInfo} />
         <MovieRow title="Adult Animation" movies={rows.adultAnimation} onMoreInfo={handleMoreInfo} />
       </main>
-
       <AccountFooter />
-
-      {/* Modal with selected movie */}
       <MovieDetailsModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
