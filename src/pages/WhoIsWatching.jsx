@@ -28,7 +28,7 @@ const WhoIsWatching = () => {
         const response = await fetch(`${API_URL}/api/users/profiles`, {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         });
         const data = await response.json();
@@ -46,7 +46,7 @@ const WhoIsWatching = () => {
 
   const handleProfileSelect = (profile, e) => {
     e.stopPropagation();
-    localStorage.setItem("selectedProfile", JSON.stringify(profile));
+    sessionStorage.setItem("selectedProfile", JSON.stringify(profile));
     navigate('/home');
   };
   const updateProfileName = async (profileId, newName) => {
@@ -55,7 +55,7 @@ const WhoIsWatching = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
         body: JSON.stringify({ profileName: newName }),
       });
@@ -108,7 +108,7 @@ const WhoIsWatching = () => {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         });
         const data = await response.json();
@@ -135,7 +135,7 @@ const WhoIsWatching = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
         body: JSON.stringify({ profileName, avatar: randomAvatar }),
       });
