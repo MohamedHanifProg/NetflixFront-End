@@ -8,6 +8,8 @@ function Menu() {
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  const loggedInProfile = JSON.parse(sessionStorage.getItem("selectedProfile"));
+
   const isActive = (path) => location.pathname.startsWith(path);
 
   // Toggle the dropdown menu
@@ -15,15 +17,14 @@ function Menu() {
     setDropdownOpen((prev) => !prev);
   };
 
-  // Handles logging out: clears stored auth and navigates to login page.
+  // Log out: remove session data and navigate to login page
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("selectedProfile");
-    // You can also clear any user state if maintained by context or Redux
-    navigate("/"); // Assuming "/" is your login or landing page
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("selectedProfile");
+    navigate("/"); // Assuming "/" is the login page
   };
 
-  // Handles switching profiles: navigates to the profiles page.
+  // Switch profile: navigate to the profiles page
   const handleSwitchProfile = () => {
     navigate("/profiles");
   };
@@ -44,16 +45,10 @@ function Menu() {
         <Link to="/tv-shows" className={isActive("/tv-shows") ? "active" : ""}>
           TV Shows
         </Link>
-        <Link
-          to="/movies"
-          className={isActive("/movies") ? "active" : ""}
-        >
+        <Link to="/movies" className={isActive("/movies") ? "active" : ""}>
           Movies
         </Link>
-        <Link
-          to="/new-popular"
-          className={isActive("/new-popular") ? "active" : ""}
-        >
+        <Link to="/new-popular" className={isActive("/new-popular") ? "active" : ""}>
           New & Popular
         </Link>
         <Link to="/mylist" className={isActive("/mylist") ? "active" : ""}>
@@ -77,7 +72,11 @@ function Menu() {
         >
           <img
             className="profile-avatar"
-            src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
+            // Use logged-in profile avatar from sessionStorage, with fallback
+            src={
+              loggedInProfile?.avatar ||
+              "https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
+            }
             alt="User Avatar"
           />
           <i className="fas fa-caret-down dropdown-icon"></i>
