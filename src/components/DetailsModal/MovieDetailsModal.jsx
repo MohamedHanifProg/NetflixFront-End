@@ -19,17 +19,19 @@ const playIcon = "/assets/playIcon.png";
 // RESTful base route
 const BASE = `${API_BASE_URL}/details`;
 
+
+
 function MovieDetailsModal({ isOpen, onClose, movie }) {
   const [movieDetails, setMovieDetails] = useState(null);
   const [episodes, setEpisodes] = useState(null);
-  const navigate = useNavigate();
 
   const isTV = movie?.media_type === 'tv';
   const title = movie?.title || movie?.name;
 
-  const handleReviewClick = () => {
-    navigate('/review', { state: { movie } });
-  };
+  const navigate = useNavigate();
+const handleReviewClick = () => {
+  navigate('/review', { state: { movie } });
+};
 
   useEffect(() => {
     if (!movie) return;
