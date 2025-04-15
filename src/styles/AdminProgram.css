@@ -1,0 +1,46 @@
+/* AdminProgram.css */
+.admin-program-page {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .admin-program-form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .admin-program-form input,
+  .admin-program-form select,
+  .admin-program-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    box-sizing: border-box;
+  }
+  
+  .admin-program-form button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #e50914;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .admin-program-form button:hover {
+    background-color: #f40612;
+  }
+  
+  .error {
+    color: red;
+    margin-bottom: 10px;
+  }
+  
+  .success {
+    color: green;
+    margin-bottom: 10px;
+  }
+  

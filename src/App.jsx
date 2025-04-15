@@ -9,6 +9,9 @@ import Review from './pages/Review';
 import MyList from './pages/MyList';
 import NewAndPopular from './pages/NewAndPopular'; 
 import Browse from './pages/Browse';
+import AdminProgramPage from './pages/AdminProgramPage';
+import AdminProgramDashboard from './pages/AdminProgramDashboard';
+import EditProgramPage from './pages/EditProgramPage';
 
 function App() {
   return (
@@ -23,6 +26,9 @@ function App() {
       <Route path="/mylist" element={<MyList />} />
       <Route path="/new-popular" element={<NewAndPopular />} />
       <Route path="/browse" element={<Browse />} /> 
+      <Route path="/admin/programs" element={<AdminProgramDashboard />} />
+      <Route path="/admin/programs/new" element={<AdminProgramPage />} />
+      <Route path="/admin/programs/edit/:id" element={<EditProgramPage />} />
     </Routes>
   );
 }
