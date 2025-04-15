@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import  API_URL  from '../config';
 import '../styles/AdminProgram.css';
+import AdminLayout from '../Layouts/Admin/AdminLayout';
 
 const AdminProgramPage = () => {
   const navigate = useNavigate();
@@ -79,6 +80,7 @@ const AdminProgramPage = () => {
   };
 
   return (
+    <AdminLayout>
     <div className="admin-program-page">
       <h1>Admin Program Management</h1>
       <form onSubmit={handleSubmit} className="admin-program-form">
@@ -168,6 +170,7 @@ const AdminProgramPage = () => {
         <button type="submit">Create Program</button>
       </form>
     </div>
+    </AdminLayout>
   );
 };
 

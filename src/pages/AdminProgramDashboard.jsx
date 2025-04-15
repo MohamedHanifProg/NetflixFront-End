@@ -4,6 +4,7 @@ import  API_URL  from '../config';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/AdminProgramDashboard.css';
+import AdminLayout from '../Layouts/Admin/AdminLayout';
 
 const AdminProgramDashboard = () => {
   const [programs, setPrograms] = useState([]);
@@ -43,6 +44,7 @@ const AdminProgramDashboard = () => {
   };
 
   return (
+    <AdminLayout>
     <div className="admin-dashboard">
       <h1>Program Dashboard</h1>
       {error && <div className="error">{error}</div>}
@@ -64,15 +66,18 @@ const AdminProgramDashboard = () => {
               <td>{program.mediaType}</td>
               <td>{program.releaseDate ? new Date(program.releaseDate).toLocaleDateString() : 'N/A'}</td>
               <td>
-                <button onClick={() => handleEdit(program)}>Edit</button>
-                <button onClick={() => handleDelete(program._id)}>Delete</button>
-              </td>
+                <div className="action-buttons">
+                    <button onClick={() => handleEdit(program)}>Edit</button>
+                    <button onClick={() => handleDelete(program._id)}>Delete</button>
+                </div>
+                </td>
             </tr>
           ))}
         </tbody>
       </table>
       <button onClick={() => navigate('/admin/programs/new')}>Add New Program</button>
     </div>
+    </AdminLayout>
   );
 };
 

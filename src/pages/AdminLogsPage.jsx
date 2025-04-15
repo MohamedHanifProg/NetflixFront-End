@@ -1,8 +1,9 @@
 // src/pages/AdminLogsPage.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
+import  API_URL  from '../config';
 import '../styles/AdminLogs.css';
+import AdminLayout from '../Layouts/Admin/AdminLayout';
 import { useNavigate } from 'react-router-dom';
 
 const AdminLogsPage = () => {
@@ -12,7 +13,7 @@ const AdminLogsPage = () => {
 
   const fetchLogs = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/logs`, {
+      const response = await axios.get(`${API_URL}/logs`, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('token')}`
         }
@@ -29,6 +30,7 @@ const AdminLogsPage = () => {
   }, []);
 
   return (
+    <AdminLayout>
     <div className="admin-logs-page">
       <h1>System Logs</h1>
       {error && <div className="error">{error}</div>}
@@ -52,6 +54,7 @@ const AdminLogsPage = () => {
       </table>
       <button onClick={() => navigate('/admin/dashboard')}>Back to Dashboard</button>
     </div>
+    </AdminLayout>
   );
 };
 

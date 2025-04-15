@@ -5,14 +5,22 @@ import AuthLayout from '../Layouts/Auth/AuthLayout';
 import { useNavigate } from 'react-router-dom';
 import API_URL from '../config';
 
-
-
-
+// Helper function to decode a JWT token (for simple role check)
+function parseJwt(token) {
+  if (!token) return null;
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch (e) {
+    console.error('Failed to parse token', e);
+    return null;
+  }
+}
 
 function Login() {
   const [form, setForm] = useState({ email: '', password: '', remember: false });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({ ...form, [name]: type === 'checkbox' ? checked : value });
@@ -28,16 +36,24 @@ function Login() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
-      const data = await response.json();
 
+      const data = await response.json();
       if (!response.ok) {
         setError(data.message || 'Login failed');
         return;
       }
 
       console.log('Login successful:', data);
+      // Store token in sessionStorage
       sessionStorage.setItem('token', data.token);
-      navigate('/profiles');
+
+      // Decode the token to check the user role
+      const tokenData = parseJwt(data.token);
+      if (tokenData && tokenData.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/profiles');
+      }
     } catch (err) {
       console.error(err);
       setError('An error occurred. Please try again.');
@@ -86,7 +102,11 @@ function Login() {
           </div>
           <p className="recaptcha-note">
             This page is protected by Google reCAPTCHA to ensure you're not a bot.{' '}
-            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://policies.google.com/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Learn more.
             </a>
           </p>

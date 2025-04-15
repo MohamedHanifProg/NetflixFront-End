@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import  API_URL  from '../config';
 import '../styles/AdminProgram.css';
+import AdminLayout from '../Layouts/Admin/AdminLayout';
 
 const EditProgramPage = () => {
   const { state } = useLocation();
@@ -84,6 +85,7 @@ const EditProgramPage = () => {
   };
 
   return (
+    <AdminLayout>
     <div className="admin-program-page">
       <h1>Edit Program</h1>
       <form onSubmit={handleSubmit} className="admin-program-form">
@@ -165,6 +167,7 @@ const EditProgramPage = () => {
         <button type="submit">Update Program</button>
       </form>
     </div>
+    </AdminLayout>
   );
 };
 

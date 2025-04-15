@@ -78,3 +78,9 @@
     text-align: center;
   }
   
+  .action-buttons {
+    display: flex;
+    gap: 10px; /* Adjust spacing as needed */
+    align-items: center;
+  }
+  

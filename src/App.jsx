@@ -13,6 +13,7 @@ import AdminProgramPage from './pages/AdminProgramPage';
 import AdminProgramDashboard from './pages/AdminProgramDashboard';
 import EditProgramPage from './pages/EditProgramPage';
 import AdminLogsPage from './pages/AdminLogsPage';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
       <Route path="/admin/programs/new" element={<AdminProgramPage />} />
       <Route path="/admin/programs/edit/:id" element={<EditProgramPage />} />
       <Route path="/admin/logs" element={<AdminLogsPage />} />
+      <Route path="/admin/dashboard" element={<AdminDashboard />} />
     </Routes>
   );
 }
