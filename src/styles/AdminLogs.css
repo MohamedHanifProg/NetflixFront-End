@@ -1,0 +1,62 @@
+/* src/styles/AdminLogs.css */
+.admin-logs-page {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #141414;
+    color: #fff;
+  }
+  
+  .admin-logs-page h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .logs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .logs-table th,
+  .logs-table td {
+    border: 1px solid #333;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .logs-table th {
+    background-color: #333;
+  }
+  
+  .logs-table tr:nth-child(even) {
+    background-color: #1f1f1f;
+  }
+  
+  .logs-table tr:hover {
+    background-color: #333;
+  }
+  
+  .error {
+    color: red;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background-color: #e50914;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  button:hover {
+    background-color: #f40612;
+  }
+  

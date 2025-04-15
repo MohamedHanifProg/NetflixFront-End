@@ -12,6 +12,7 @@ import Browse from './pages/Browse';
 import AdminProgramPage from './pages/AdminProgramPage';
 import AdminProgramDashboard from './pages/AdminProgramDashboard';
 import EditProgramPage from './pages/EditProgramPage';
+import AdminLogsPage from './pages/AdminLogsPage';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
       <Route path="/admin/programs" element={<AdminProgramDashboard />} />
       <Route path="/admin/programs/new" element={<AdminProgramPage />} />
       <Route path="/admin/programs/edit/:id" element={<EditProgramPage />} />
+      <Route path="/admin/logs" element={<AdminLogsPage />} />
     </Routes>
   );
 }
