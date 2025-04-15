@@ -4,50 +4,56 @@ import AppLayout from '../Layouts/App/AppLayout';
 import Menu from '../components/Menu/Menu';
 import AccountFooter from '../components/Footer/AccountFooter';
 import '../styles/ExplorePage.css';
-import API_BASE_URL from '../config'; // ✅ Backend URL for proxy
+import API_BASE_URL from '../config'; // Your backend base URL
 
 const MyList = () => {
-  const [comingSoon, setComingSoon] = useState([]);
-  const [trending, setTrending] = useState([]);
-  const [topPicks, setTopPicks] = useState([]);
+  const [myListItems, setMyListItems] = useState([]);
 
   useEffect(() => {
-    const storedList = JSON.parse(localStorage.getItem('myList')) || [];
-
-    const fetchItems = async () => {
+    const fetchMyList = async () => {
       try {
-        const responses = await Promise.all(
-          storedList.map(item =>
+        const token = sessionStorage.getItem('token');
+        if (!token) {
+          console.warn('No token found');
+          return;
+        }
+
+        // Get saved items for this user
+        const listResponse = await axios.get(`${API_BASE_URL}/mylist`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const listItems = listResponse.data;
+
+        // Get detailed data from TMDB using your backend proxy
+        const detailedItems = await Promise.all(
+          listItems.map((item) =>
             axios
               .get(`${API_BASE_URL}/homepage/proxy`, {
-                params: { url: `/${item.media_type}/${item.id}` }
+                params: { url: `/${item.media_type}/${item.tmdb_id}` },
               })
-              .then(res => ({ ...res.data, media_type: item.media_type }))
+              .then((res) => ({
+                ...res.data,
+                media_type: item.media_type,
+              }))
           )
         );
 
-        // Categorize items (just a demo categorization by index)
-        const soon = responses.filter((_, idx) => idx % 3 === 0);
-        const trend = responses.filter((_, idx) => idx % 3 === 1);
-        const picks = responses.filter((_, idx) => idx % 3 === 2);
-
-        setComingSoon(soon);
-        setTrending(trend);
-        setTopPicks(picks);
+        setMyListItems(detailedItems);
       } catch (err) {
-        console.error('Error fetching my list items:', err);
+        console.error('Error fetching user list:', err);
       }
     };
 
-    if (storedList.length > 0) {
-      fetchItems();
-    }
+    fetchMyList();
   }, []);
 
-  const renderSection = (title, items) => (
+  const renderSection = (title, items) =>
     items.length > 0 && (
       <section className="explore-section">
-        <h2 className="explore-subtitle">{title}</h2>
+        
         <div className="explore-grid">
           {items.map((item) => (
             <div className="explore-card" key={item.id}>
@@ -59,18 +65,15 @@ const MyList = () => {
           ))}
         </div>
       </section>
-    )
-  );
+    );
 
   return (
     <AppLayout>
       <Menu activePage="mylist" />
       <main className="explore-page">
         <h1 className="explore-title">My List</h1>
-        {renderSection('Coming Soon', comingSoon)}
-        {renderSection('Trending', trending)}
-        {renderSection('Top Picks', topPicks)}
-        {comingSoon.length + trending.length + topPicks.length === 0 && (
+        {renderSection('My List', myListItems)}
+        {myListItems.length === 0 && (
           <p style={{ color: '#999', marginTop: '20px' }}>Your list is empty.</p>
         )}
         <AccountFooter />
@@ -79,4 +82,4 @@ const MyList = () => {
   );
 };
 
-export default MyList
+export default MyList;

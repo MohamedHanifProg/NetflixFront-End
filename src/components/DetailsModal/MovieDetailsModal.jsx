@@ -19,19 +19,44 @@ const playIcon = "/assets/playIcon.png";
 // RESTful base route
 const BASE = `${API_BASE_URL}/details`;
 
-
-
 function MovieDetailsModal({ isOpen, onClose, movie }) {
   const [movieDetails, setMovieDetails] = useState(null);
   const [episodes, setEpisodes] = useState(null);
-
   const isTV = movie?.media_type === 'tv';
   const title = movie?.title || movie?.name;
-
   const navigate = useNavigate();
-const handleReviewClick = () => {
-  navigate('/review', { state: { movie } });
-};
+
+  const handleReviewClick = () => {
+    navigate('/review', { state: { movie } });
+  };
+
+  const handleAddToList = async () => {
+    try {
+      const token = sessionStorage.getItem('token');
+      if (!token) return alert("You must be logged in.");
+
+      await axios.post(
+        `${API_BASE_URL}/mylist/add`,
+        {
+          id: movie.id,
+          media_type: movie.media_type,
+          title: movie.title || movie.name,
+          poster_path: movie.poster_path,
+          backdrop_path: movie.backdrop_path,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert("Added to your list!");
+    } catch (error) {
+      console.error("Error adding to list:", error);
+      alert("This item may already be in your list.");
+    }
+  };
 
   useEffect(() => {
     if (!movie) return;
@@ -101,7 +126,7 @@ const handleReviewClick = () => {
               <button className="review-btn" onClick={handleReviewClick}>
                 <img src={reviewButton} alt="Review" />
               </button>
-              <button className="plus-btn">
+              <button className="plus-btn" onClick={handleAddToList}>
                 <img src={plusButtonIcon} alt="Add to List" />
               </button>
             </div>
