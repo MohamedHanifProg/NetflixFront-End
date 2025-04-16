@@ -16,18 +16,43 @@ const labelIcon = "/assets/Label.png";
 const netflixNIcon = "/assets/NetflixSmall.png";
 const playIcon = "/assets/playIcon.png";
 
-// RESTful base route
 const BASE = `${API_BASE_URL}/details`;
 
 function MovieDetailsModal({ isOpen, onClose, movie }) {
   const [movieDetails, setMovieDetails] = useState(null);
   const [episodes, setEpisodes] = useState(null);
+  const [userReviews, setUserReviews] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+
   const isTV = movie?.media_type === 'tv';
   const title = movie?.title || movie?.name;
   const navigate = useNavigate();
 
   const handleReviewClick = () => {
     navigate('/review', { state: { movie } });
+  };
+
+  const handleEditReview = (review) => {
+    navigate('/review', { state: { movie, review } });
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    const confirmed = window.confirm("Are you sure you want to delete this review?");
+    if (!confirmed) return;
+
+    try {
+      const token = sessionStorage.getItem('token');
+      await axios.delete(`${API_BASE_URL}/reviews/${reviewId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      alert("Review deleted.");
+      fetchReviews(); // Refresh reviews
+    } catch (err) {
+      console.error("Failed to delete review:", err);
+      alert("Could not delete review.");
+    }
   };
 
   const handleAddToList = async () => {
@@ -58,6 +83,26 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
     }
   };
 
+  const fetchReviews = async () => {
+    try {
+      const token = sessionStorage.getItem('token');
+      const res = await axios.get(`${API_BASE_URL}/reviews/${movie.id}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+
+      const allReviews = res.data;
+      const userId = token ? JSON.parse(atob(token.split('.')[1]))?.id : null;
+
+      const own = allReviews.filter(r => r.user?._id === userId);
+      const others = allReviews.filter(r => r.isPublic && r.user?._id !== userId);
+
+      setUserReviews(own);
+      setReviews(others);
+    } catch (err) {
+      console.error("Failed to fetch reviews:", err);
+    }
+  };
+
   useEffect(() => {
     if (!movie) return;
 
@@ -66,6 +111,7 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
         const endpoint = `${BASE}/${movie.media_type}/${movie.id}`;
         const res = await axios.get(endpoint);
         setMovieDetails(res.data);
+        fetchReviews();
       } catch (err) {
         console.error('Failed to fetch movie details:', err);
       }
@@ -176,6 +222,43 @@ function MovieDetailsModal({ isOpen, onClose, movie }) {
             </div>
           </div>
         </div>
+
+        {userReviews.length > 0 && (
+          <div className="review-section">
+            <h3>Your Reviews</h3>
+            {userReviews.map((r) => (
+              <div key={r._id} className="review-card">
+                <p>{r.text}</p>
+                <p><strong>Rating:</strong> {'⭐'.repeat(r.rating)}</p>
+                <small>{r.isPublic ? 'Public' : 'Private'}</small>
+                <div className="review-buttons">
+                  <button onClick={() => handleEditReview(r)}>Edit</button>
+                  <button onClick={() => handleDeleteReview(r._id)}>Delete</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {reviews.length > 0 && (
+          <div className="review-section">
+            <h3>What others say</h3>
+            {(showAllReviews ? reviews : reviews.slice(0, 3)).map((r) => (
+              <div key={r._id} className="review-card">
+                <p>{r.text}</p>
+                <p><strong>Rating:</strong> {'⭐'.repeat(r.rating)}</p>
+              </div>
+            ))}
+            {reviews.length > 3 && (
+              <button
+                className="see-more-btn"
+                onClick={() => setShowAllReviews(prev => !prev)}
+              >
+                {showAllReviews ? 'See Less' : 'See More'}
+              </button>
+            )}
+          </div>
+        )}
 
         {isTV && episodes?.length > 0 && (
           <div className="episodes-section">

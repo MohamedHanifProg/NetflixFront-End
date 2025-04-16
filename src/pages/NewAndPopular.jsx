@@ -15,32 +15,33 @@ const NewAndPopular = () => {
   const [hasMore, setHasMore] = useState(true);
   const containerRef = useRef();
 
-  const fetchData = async () => {
-    if (!hasMore) return;
-    try {
-      const res = await axios.get(`${BASE}?page=${page}`);
-      const newItems = res.data.map(item => ({
-        ...item,
-        media_type: item.media_type || 'movie'
-      }));
-  
-      // Deduplicate by unique key
-      setItems(prev => {
-        const existingKeys = new Set(prev.map(i => `${i.media_type}-${i.id}`));
-        const filtered = newItems.filter(i => !existingKeys.has(`${i.media_type}-${i.id}`));
-        return [...prev, ...filtered];
-      });
-  
-      if (res.data.length === 0) {
-        setHasMore(false);
-      } else {
-        setPage(prev => prev + 1);
-      }
-    } catch (err) {
-      console.error('Failed to fetch new & popular items:', err);
+const fetchData = async () => {
+  if (!hasMore || page > 100) return; // ✅ גבול של 100 עמודים
+
+  try {
+    const res = await axios.get(`${BASE}?page=${page}`);
+    const newItems = res.data.map(item => ({
+      ...item,
+      media_type: item.media_type || 'movie'
+    }));
+
+    // Deduplicate by unique key
+    setItems(prev => {
+      const existingKeys = new Set(prev.map(i => `${i.media_type}-${i.id}`));
+      const filtered = newItems.filter(i => !existingKeys.has(`${i.media_type}-${i.id}`));
+      return [...prev, ...filtered];
+    });
+
+    if (res.data.length === 0 || page >= 100) {
+      setHasMore(false);
+    } else {
+      setPage(prev => prev + 1);
     }
-  };
-  
+  } catch (err) {
+    console.error('Failed to fetch new & popular items:', err);
+  }
+};
+
 
   useEffect(() => {
     fetchData();

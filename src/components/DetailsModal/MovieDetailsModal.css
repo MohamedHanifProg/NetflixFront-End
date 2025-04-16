@@ -511,4 +511,68 @@
     line-height: 20px; /* 142.857% */
     margin: 0;
   }
-  
+  /* Review section title */
+.review-section {
+  padding: 20px 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #141414;
+  color: #fff;
+}
+
+/* Section heading */
+.review-section h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+/* Each review card */
+.review-card {
+  background-color: #1f1f1f;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 12px;
+  color: #ddd;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Your own review (a little different for emphasis) */
+.user-review {
+  background-color: #262626;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border-left: 5px solid #e50914;
+}
+
+.user-review small {
+  color: #aaa;
+  font-size: 0.8rem;
+}
+
+/* Stars (plain version for now, can add hover effects later) */
+.review-card p,
+.user-review p {
+  margin: 5px 0;
+}
+
+.review-card p:last-child,
+.user-review p:last-child {
+  color: gold;
+  font-size: 1.2rem;
+}
+.see-more-btn {
+  background: transparent;
+  border: 1px solid #888;
+  color: #fff;
+  padding: 8px 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: background 0.2s;
+}
+
+.see-more-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
