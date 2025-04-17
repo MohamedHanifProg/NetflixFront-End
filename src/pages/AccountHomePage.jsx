@@ -48,6 +48,7 @@ const AccountHomePage = () => {
     fetchRow('matched', 'matched');
     fetchRow('netflix', 'netflix');
     fetchRow('top10', 'top10');
+    fetchRow('recent', 'recent'); 
     fetchRow('love', 'love');
     fetchRow('animation', 'animation');
     fetchRow('inspiring', 'inspiring');
@@ -124,6 +125,7 @@ const AccountHomePage = () => {
         <MovieRow title="Matched for You" movies={rows.matched} onMoreInfo={handleMoreInfo} />
         <MovieRow title="Now on Netflix" movies={rows.netflix} onMoreInfo={handleMoreInfo} />
         <MovieRow title="Top 10 movies in the U.S. Today" movies={rows.top10} showRanking={true} onMoreInfo={handleMoreInfo} />
+        <MovieRow title="Your Recently Reviewed"  movies={rows.recent}   onMoreInfo={handleMoreInfo} />
         <MovieRow title="We Think You'll Love These" movies={rows.love} onMoreInfo={handleMoreInfo} />
         <MovieRow title="Animation" movies={rows.animation} onMoreInfo={handleMoreInfo} />
         <MovieRow title="Inspiring Movies" movies={rows.inspiring} onMoreInfo={handleMoreInfo} />
