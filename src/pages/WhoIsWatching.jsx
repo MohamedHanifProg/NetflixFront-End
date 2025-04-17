@@ -5,53 +5,57 @@ import AppLayout from '../Layouts/App/AppLayout';
 import { useNavigate } from 'react-router-dom';
 import API_URL from '../config';
 
+import AddProfileModal from '../components/Modal/AddProfileModal';
+import ConfirmModal    from '../components/Modal/ConfirmModal';
 
-
-const plusIcon = "/assets/PlusIcon.png";
-const deleteIcon = "/assets/DeleteIcon.png"; 
+const plusIcon   = '/assets/PlusIcon.png';
+const deleteIcon = '/assets/DeleteIcon.png';
 
 const availableAvatars = [
-  "/assets/avatar1.png",
-  "/assets/avatar2.png",
-  "/assets/avatar3.png",
+  '/assets/avatar1.png',
+  '/assets/avatar2.png',
+  '/assets/avatar3.png',
 ];
 
-const WhoIsWatching = () => {
-  const [profiles, setProfiles] = useState([]);
-  const [editingProfileId, setEditingProfileId] = useState(null);
-  const [editingProfileName, setEditingProfileName] = useState('');
+export default function WhoIsWatching() {
+  const [profiles, setProfiles]      = useState([]);
+  const [editingId,   setEditingId]   = useState(null);
+  const [editingName, setEditingName] = useState('');
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+
   const navigate = useNavigate();
 
+  /* ─── Fetch profiles once */
   useEffect(() => {
-    const fetchProfiles = async () => {
+    (async () => {
       try {
-        const response = await fetch(`${API_URL}/users/profiles`, {
+        const res  = await fetch(`${API_URL}/users/profiles`, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         });
-        const data = await response.json();
-        if (response.ok) {
-          setProfiles(data.profiles);
-        } else {
-          console.error(data.message);
-        }
-      } catch (error) {
-        console.error('Error fetching profiles', error);
+        const data = await res.json();
+        if (res.ok) setProfiles(data.profiles);
+        else        console.error(data.message);
+      } catch (err) {
+        console.error('Fetching profiles failed', err);
       }
-    };
-    fetchProfiles();
+    })();
   }, []);
 
-  const handleProfileSelect = (profile, e) => {
+  /* ─── Select profile */
+  const selectProfile = (profile, e) => {
     e.stopPropagation();
-    sessionStorage.setItem("selectedProfile", JSON.stringify(profile));
+    sessionStorage.setItem('selectedProfile', JSON.stringify(profile));
     navigate('/home');
   };
-  const updateProfileName = async (profileId, newName) => {
+
+  /* ─── Rename profile */
+  const updateProfileName = async (id, newName) => {
     try {
-      const response = await fetch(`${API_URL}/users/profiles/${profileId}`, {
+      const res  = await fetch(`${API_URL}/users/profiles/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -59,148 +63,144 @@ const WhoIsWatching = () => {
         },
         body: JSON.stringify({ profileName: newName }),
       });
-      const data = await response.json();
-      if (response.ok) {
-        setProfiles((prevProfiles) =>
-          prevProfiles.map((p) =>
-            p._id === profileId ? { ...p, profileName: newName } : p
-          )
-        );
-      } else {
-        console.error(data.message);
-      }
-    } catch (error) {
-      console.error('Error updating profile', error);
+      const data = await res.json();
+      if (res.ok) {
+        setProfiles(p => p.map(t => (t._id === id ? { ...t, profileName: newName } : t)));
+      } else console.error(data.message);
+    } catch (err) {
+      console.error('Rename failed', err);
     }
   };
 
-  const handleNameClick = (profile, e) => {
-    e.stopPropagation();
-    setEditingProfileId(profile._id);
-    setEditingProfileName(profile.profileName);
-  };
-
-  const handleNameChange = (e) => {
-    setEditingProfileName(e.target.value);
-  };
-
-  const handleNameBlur = async () => {
-    if (editingProfileId && editingProfileName) {
-      await updateProfileName(editingProfileId, editingProfileName);
-    }
-    setEditingProfileId(null);
-    setEditingProfileName('');
-  };
-
-  const handleNameKeyDown = async (e) => {
-    if (e.key === 'Enter') {
-      await updateProfileName(editingProfileId, editingProfileName);
-      setEditingProfileId(null);
-      setEditingProfileName('');
-    }
-  };
-
-  const handleDeleteProfile = async (profileId, e) => {
-    e.stopPropagation();
-    if (window.confirm("Are you sure you want to delete this profile?")) {
-      try {
-        const response = await fetch(`${API_URL}/users/profiles/${profileId}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-          },
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setProfiles(prevProfiles => prevProfiles.filter(p => p._id !== profileId));
-        } else {
-          console.error(data.message);
-        }
-      } catch (error) {
-        console.error("Error deleting profile", error);
-      }
-    }
-  };
-
-
-  const handleAddProfile = async () => {
-    const profileName = window.prompt("Enter a name for your new profile:");
-    if (!profileName || profileName.trim() === "") return;
-
-    const randomAvatar = availableAvatars[Math.floor(Math.random() * availableAvatars.length)];
-
+  /* ─── Delete profile */
+  const deleteProfile = async () => {
+    if (!deleteTarget) return;
     try {
-      const response = await fetch(`${API_URL}/users/profiles`, {
+      const res  = await fetch(`${API_URL}/users/profiles/${deleteTarget._id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      });
+      const data = await res.json();
+      if (res.ok) setProfiles(p => p.filter(t => t._id !== deleteTarget._id));
+      else        console.error(data.message);
+    } catch (err) {
+      console.error('Delete failed', err);
+    } finally {
+      setDeleteTarget(null);
+    }
+  };
+
+  /* ─── Add profile */
+  const addProfile = async (profileName) => {
+    const avatar = availableAvatars[Math.random() * availableAvatars.length | 0];
+    try {
+      const res  = await fetch(`${API_URL}/users/profiles`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
-        body: JSON.stringify({ profileName, avatar: randomAvatar }),
+        body: JSON.stringify({ profileName, avatar }),
       });
-      const data = await response.json();
-      if (response.ok) {
-        setProfiles(prev => [...prev, data.profile]);
-      } else {
-        console.error(data.message);
-      }
-    } catch (error) {
-      console.error("Error adding profile", error);
+      const data = await res.json();
+      if (res.ok) setProfiles(p => [...p, data.profile]);
+      else        console.error(data.message);
+    } catch (err) {
+      console.error('Add profile failed', err);
+    } finally {
+      setShowAddModal(false);
     }
   };
 
+  /* ─── UI */
   return (
     <AppLayout>
       <div className="whos-watching-container">
         <h1 className="page-title">Who’s watching?</h1>
+
         <div className="profiles-container">
-          {profiles.map((profile) => (
+          {profiles.map(profile => (
             <div
-              className="profile-box"
               key={profile._id}
+              className="profile-box"
               style={{ position: 'relative' }}
-              onClick={(e) => handleProfileSelect(profile, e)}
+              onClick={(e) => selectProfile(profile, e)}
             >
+              {/* delete */}
               <button
                 className="delete-button"
-                onClick={(e) => handleDeleteProfile(profile._id, e)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDeleteTarget(profile);
+                }}
               >
-                <img src={deleteIcon} alt="Delete Profile" />
+                <img src={deleteIcon} alt="Delete" />
               </button>
-              <img
-                src={profile.avatar}
-                alt={profile.profileName}
-                className="profile-image"
-              />
-              {editingProfileId === profile._id ? (
+
+              {/* avatar */}
+              <img src={profile.avatar} alt={profile.profileName} className="profile-image" />
+
+              {/* name / editor */}
+              {editingId === profile._id ? (
                 <input
-                  type="text"
-                  value={editingProfileName}
-                  onChange={handleNameChange}
-                  onBlur={handleNameBlur}
-                  onKeyDown={handleNameKeyDown}
+                  value={editingName}
                   autoFocus
+                  onChange={(e) => setEditingName(e.target.value)}
+                  onBlur={() => {
+                    updateProfileName(editingId, editingName);
+                    setEditingId(null);
+                    setEditingName('');
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      updateProfileName(editingId, editingName);
+                      setEditingId(null);
+                      setEditingName('');
+                    }
+                  }}
                 />
               ) : (
-                <p className="profile-name" onClick={(e) => handleNameClick(profile, e)}>
+                <p
+                  className="profile-name"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setEditingId(profile._id);
+                    setEditingName(profile.profileName);
+                  }}
+                >
                   {profile.profileName}
                 </p>
               )}
             </div>
           ))}
+
+          {/* add tile */}
           {profiles.length < 5 && (
-            <div className="profile-box add-profile" onClick={handleAddProfile}>
+            <div className="profile-box add-profile" onClick={() => setShowAddModal(true)}>
               <div className="add-placeholder">
-                <img src={plusIcon} alt="Add Profile" className="plus-icon" />
+                <img src={plusIcon} alt="Add" className="plus-icon" />
               </div>
               <p className="profile-name">Add Profile</p>
             </div>
           )}
         </div>
       </div>
+
+      {/* modals */}
+      {showAddModal && (
+        <AddProfileModal onSave={addProfile} onClose={() => setShowAddModal(false)} />
+      )}
+
+      {deleteTarget && (
+        <ConfirmModal
+          message={`Delete “${deleteTarget.profileName}”?`}
+          onConfirm={deleteProfile}
+          onCancel={() => setDeleteTarget(null)}
+        />
+      )}
     </AppLayout>
   );
-};
-
-export default WhoIsWatching;
+}

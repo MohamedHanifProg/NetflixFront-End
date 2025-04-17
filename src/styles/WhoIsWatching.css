@@ -100,3 +100,38 @@
     object-fit: contain;
   }
   
+
+  .inline-msg {
+    background: #141414;
+    color: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  
+  .inline-msg input {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: none;
+  }
+  
+  .inline-msg button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .inline-msg.danger {
+    background: #3b070a;
+  }
+  
+  button.danger {
+    background: #e50914;
+    color: #fff;
+  }
+  
