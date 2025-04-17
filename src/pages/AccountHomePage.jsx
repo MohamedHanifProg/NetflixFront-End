@@ -12,6 +12,8 @@ const BASE = `${API_URL}/homepage`;
 
 const AccountHomePage = () => {
   const [rows, setRows] = useState({});
+  const [coverImages, setCoverImages] = useState([]);
+  const [currentCoverIndex, setCurrentCoverIndex] = useState(0);
   const [coverMovie, setCoverMovie] = useState(null);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -29,7 +31,9 @@ const AccountHomePage = () => {
   const fetchCover = async () => {
     try {
       const res = await axios.get(`${BASE}/cover`);
-      setCoverMovie(res.data);
+      const images = Array.isArray(res.data) ? res.data : [res.data]; // allow single or array
+      setCoverImages(images.slice(0, 4)); // store max 4
+      setCoverMovie(images[0]); // initial image
     } catch (err) {
       console.error('Failed to fetch cover movie:', err);
     }
@@ -37,18 +41,33 @@ const AccountHomePage = () => {
 
   useEffect(() => {
     fetchCover();
-    fetchRow('matched', 'matched'); // 10 items
-    fetchRow('netflix', 'netflix'); // 10 items
-    fetchRow('top10', 'top10');     // 10 items
-    fetchRow('love', 'love');       // all
-    fetchRow('animation', 'animation'); // all
-    fetchRow('inspiring', 'inspiring'); // all
-    fetchRow('watchlist', 'watchlist'); // all
-    fetchRow('weekend', 'weekend');     // all
-    fetchRow('critics', 'critics');     // all
-    fetchRow('fresh', 'fresh');         // all
-    fetchRow('adultAnimation', 'adultAnimation'); // all
+    fetchRow('matched', 'matched');
+    fetchRow('netflix', 'netflix');
+    fetchRow('top10', 'top10');
+    fetchRow('love', 'love');
+    fetchRow('animation', 'animation');
+    fetchRow('inspiring', 'inspiring');
+    fetchRow('watchlist', 'watchlist');
+    fetchRow('weekend', 'weekend');
+    fetchRow('critics', 'critics');
+    fetchRow('fresh', 'fresh');
+    fetchRow('adultAnimation', 'adultAnimation');
   }, []);
+
+  // Rotate background every 5 seconds
+  useEffect(() => {
+    if (coverImages.length === 0) return;
+
+    const interval = setInterval(() => {
+      setCurrentCoverIndex((prevIndex) => {
+        const nextIndex = (prevIndex + 1) % coverImages.length;
+        setCoverMovie(coverImages[nextIndex]);
+        return nextIndex;
+      });
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [coverImages]);
 
   useEffect(() => {
     document.body.style.overflow = modalOpen ? 'hidden' : '';
