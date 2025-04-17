@@ -20,13 +20,17 @@ const AccountHomePage = () => {
 
   const fetchRow = async (key, endpoint) => {
     try {
-      const res = await axios.get(`${BASE}/${endpoint}`);
+      const token = sessionStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  
+      const res = await axios.get(`${BASE}/${endpoint}`, { headers });
       const results = res.data.results || res.data || [];
       setRows(prev => ({ ...prev, [key]: results }));
     } catch (err) {
       console.error(`Failed to load ${key}:`, err);
     }
   };
+  
 
   const fetchCover = async () => {
     try {
