@@ -49,14 +49,11 @@ const AccountHomePage = () => {
     fetchRow('netflix', 'netflix');
     fetchRow('top10', 'top10');
     fetchRow('recent', 'recent'); 
-    fetchRow('love', 'love');
+    fetchRow('popular','popular'); 
     fetchRow('animation', 'animation');
     fetchRow('inspiring', 'inspiring');
     fetchRow('watchlist', 'watchlist');
-    fetchRow('weekend', 'weekend');
-    fetchRow('critics', 'critics');
-    fetchRow('fresh', 'fresh');
-    fetchRow('adultAnimation', 'adultAnimation');
+    fetchRow('mylist', 'mylistrecent'); 
   }, []);
 
   // Rotate background every 5 seconds
@@ -121,19 +118,14 @@ const AccountHomePage = () => {
             </div>
           </div>
         </section>
-
         <MovieRow title="Matched for You" movies={rows.matched} onMoreInfo={handleMoreInfo} />
         <MovieRow title="Now on Netflix" movies={rows.netflix} onMoreInfo={handleMoreInfo} />
         <MovieRow title="Top 10 movies in the U.S. Today" movies={rows.top10} showRanking={true} onMoreInfo={handleMoreInfo} />
         <MovieRow title="Your Recently Reviewed"  movies={rows.recent}   onMoreInfo={handleMoreInfo} />
-        <MovieRow title="We Think You'll Love These" movies={rows.love} onMoreInfo={handleMoreInfo} />
+        <MovieRow title="Top‑Rated by Other Users" movies={rows.popular} onMoreInfo={handleMoreInfo} /> 
         <MovieRow title="Animation" movies={rows.animation} onMoreInfo={handleMoreInfo} />
         <MovieRow title="Inspiring Movies" movies={rows.inspiring} onMoreInfo={handleMoreInfo} />
-        <MovieRow title="Continue Watching for You" movies={rows.watchlist} onMoreInfo={handleMoreInfo} />
-        <MovieRow title="Watch in One Weekend" movies={rows.weekend} onMoreInfo={handleMoreInfo} />
-        <MovieRow title="Critically Acclaimed" movies={rows.critics} onMoreInfo={handleMoreInfo} />
-        <MovieRow title="Today's Fresh Picks for You" movies={rows.fresh} onMoreInfo={handleMoreInfo} />
-        <MovieRow title="Adult Animation" movies={rows.adultAnimation} onMoreInfo={handleMoreInfo} />
+        <MovieRow title="Recently Added to My List" movies={rows.mylist} onMoreInfo={handleMoreInfo} /> 
       </main>
       <AccountFooter />
       <MovieDetailsModal
