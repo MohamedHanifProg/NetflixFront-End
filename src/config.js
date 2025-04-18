@@ -4,6 +4,6 @@
 const API_URL =
   window.location.hostname === 'localhost'
     ? 'http://localhost:5000/api'            // ⬅️ local Express server
-    : 'https://netlfixback-end.onrender.com/api'; // ⬅️ Render deployment
+    : 'https://netlfixback-end-n2ry.onrender.com/api'; // ⬅️ Render deployment
 
 export default API_URL;
