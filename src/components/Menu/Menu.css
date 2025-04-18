@@ -1,16 +1,16 @@
 .menu-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 40px;
-    height: 64px;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
-    z-index: 999;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: 64px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+  z-index: 999;
+}
+
 .menu-left {
   display: flex;
   align-items: center;
@@ -21,15 +21,36 @@
   height: 36px;
 }
 
-.menu-left a {
+.menu-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.menu-links a {
   color: white;
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
 }
 
-.menu-left a:hover {
+.menu-links a:hover {
   text-decoration: underline;
+}
+
+.menu-links a.active {
+  position: relative;
+  font-weight: bold;
+}
+
+.menu-links a.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 2px;
+  background: #e50914;
 }
 
 .menu-right {
@@ -51,15 +72,14 @@
   height: 32px;
   border-radius: 4px;
   object-fit: cover;
-  cursor: pointer;
+  margin-right: 32px;
 }
 
 .profile-container {
   display: flex;
   align-items: center;
   gap: 6px;
-  cursor: pointer;
-  margin-right: 100px;
+  position: relative;
 }
 
 .dropdown-icon {
@@ -67,52 +87,113 @@
   font-size: 0.8rem;
 }
 
-/* 
-  --- ONLY UPDATED THIS FOR THE ACTIVE LINK INDICATION ---
-  Mimics Netflix with a red bar under the active link
-*/
-.menu-bar a.active {
-  color: #fff;       /* Full white text */
-  font-weight: bold; 
-  position: relative; /* Needed for the ::after positioning */
-  text-decoration: none; /* Remove any underline in 'active' state if you want a red bar instead */
-}
-
-/* Red bar indicator under the active link */
-.menu-bar a.active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -3px;      /* Adjust as needed */
-  height: 2px;       /* Thickness of the red bar */
-  background: #e50914; /* Netflix red */
-}
-
-
-/* Menu.css */
 .dropdown-menu {
   position: absolute;
-  top: 100%; /* directly under the profile container */
+  top: 100%;
   right: 0;
   background-color: #141414;
   border: 1px solid #333;
   border-radius: 4px;
   overflow: hidden;
-  z-index: 100; /* ensure it appears over other content */
+  z-index: 100;
 }
 
 .dropdown-item {
   padding: 10px;
   width: 150px;
-  text-align: left;
   background-color: #141414;
   color: #fff;
   border: none;
   cursor: pointer;
   display: block;
+  text-align: left;
 }
 
 .dropdown-item:hover {
   background-color: #333;
+}
+
+/* Hamburger icon (only on small screens) */
+.hamburger {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none;
+}
+
+/* Responsive menu */
+@media screen and (max-width: 768px) {
+  .menu-links {
+    display: none;
+    flex-direction: column;
+    background-color: rgba(20, 20, 20, 0.95);
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    z-index: 998;
+  }
+
+  .menu-links.open {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .menu-right {
+    gap: 10px;
+  }
+
+  .profile-container {
+    margin-right: 0;
+  }
+}
+/* Hide mobile icons by default */
+.mobile-icons {
+  display: none;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Hide desktop right menu on mobile */
+@media screen and (max-width: 768px) {
+  .menu-right {
+    display: none;
+  }
+
+  .mobile-icons {
+    display: flex;
+  }
+
+  .menu-links {
+    flex-direction: column;
+  }
+}
+/* Hide mobile icons by default */
+.mobile-icons {
+  display: none;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Hide desktop right menu on mobile */
+@media screen and (max-width: 768px) {
+  .menu-right {
+    display: none;
+  }
+
+  .mobile-icons {
+    display: flex;
+  }
+
+  .menu-links {
+    flex-direction: column;
+  }
 }
