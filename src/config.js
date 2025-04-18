@@ -1,3 +1,3 @@
 // src/config.js
-const API_URL = 'https://netlfixback-end.onrender.com' || 'http://localhost:5000/api';
+const API_URL = 'https://netlfixback-end.onrender.com/';
 export default API_URL;
